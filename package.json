@@ -1,0 +1,37 @@
+{
+  "name": "markov-poetry",
+  "version": "1.0.0",
+  "description": "A poetry/prose predictive text generator.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annafractuous/markov-poetry.git"
+  },
+  "keywords": [
+    "markov"
+  ],
+  "author": "Anna Rasshivkina",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/annafractuous/markov-poetry/issues"
+  },
+  "homepage": "https://github.com/annafractuous/markov-poetry#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-clean-css": "^3.9.4",
+    "gulp-cli": "^2.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-scss": "^1.4.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-webserver": "^0.9.1",
+    "pump": "^3.0.0"
+  }
+}
