@@ -19,10 +19,10 @@ gulp.task('styles',function(cb) {
         gulp.src('styles/app.scss'),
         scss(),
         autoprefixer(),
-        gulp.dest('public/css'),
+        gulp.dest('public/styles'),
         cleanCSS(),
         rename({ suffix: '.min' }),
-        gulp.dest('public/css')
+        gulp.dest('public/styles')
     ],
     cb);
 });
@@ -34,11 +34,11 @@ gulp.task('scripts', function(cb) {
     pump([
         gulp.src('scripts/*.js'),
         concat('script.js'),
-        gulp.dest('public/js'),
+        gulp.dest('public/scripts'),
         babel({ presets: ['env'] }),
         uglify(),
         rename({ suffix: '.min' }),
-        gulp.dest('public/js')
+        gulp.dest('public/scripts')
     ],
     cb);
 });
