@@ -19,7 +19,7 @@ class Library
     def create_library
         words = format_text
         grams = {}
-        order = 2
+        order = 1
 
         punctuation_regex = /\.|\?|;|!/
         end_idx = words.length - order
