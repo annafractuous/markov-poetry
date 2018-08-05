@@ -1,62 +1,89 @@
-# require 'pry-byebug'
+require 'pry-byebug'
 require 'json'
 
-class Library
-    def initialize(corpus_path)
-        @corpus_path = corpus_path
+class Dictionary
+    def initialize(corpora)
+        @corpora = corpora
+        @dictionary = {}
 
-        load_corpus
-        create_library
-        save_library
+        create_dictionary
     end
 
-    def load_corpus
-        File.open(@corpus_path) do |f| 
-            @corpus = f.read
+    def create_dictionary
+        load_text
+        process_text
+        save_dictionary
+    end
+
+    def load_text
+        set_corpus_paths
+        read_files
+    end
+
+    def set_corpus_paths
+        @corpora.map! { |path| "data/#{path}" }
+    end
+
+    def read_files
+        @corpora.map! do |corpus|
+            File.open(corpus) { |f| f.read }
         end
     end
 
-    def create_library
-        words = format_text
-        grams = {}
+    def process_text
+        @corpora.each { |corpus| add_to_dictionary(corpus) }
+    end
+
+    def add_to_dictionary(corpus)
+        words = normalize_text(corpus).split(' ')
+        loop_through(words)
+    end
+
+    def normalize_text(corpus)
+        corpus.downcase!
+        corpus.gsub!(/[^\sa-z;.!?'"‘’“”]+/, '').gsub!(/\s{2,}/, ' ')
+    end
+
+    def loop_through(words)
         order = 1
-
-        punctuation_regex = /\.|\?|;|!/
         end_idx = words.length - order
+        punctuation_regex = /\.|\?|;|!/
+
         for i in 0...end_idx do
-            next if punctuation_regex.match(words[i])
-            
-            gram = words[i...i + order].join(' ')
-            gram = strip_punctuation(gram)
+            next if punctuation_regex.match(words[i])   # don't create entry if we're at the end of a sentence
 
-            next_word = words[i + order]
-            next_word = strip_punctuation(next_word)
-            
-            if !grams[gram]
-                grams[gram] = []
-            end
+            gram, next_word = get_entry(words[i..i + order])
 
-            grams[gram].push(next_word)
-        end
-
-        @library = grams
-    end
-
-    def save_library
-        File.open('public/data/library.jsonp', 'w') do |f|
-            f.write("library = #{@library.to_json}")
+            save_entry(gram, next_word)
         end
     end
 
-    def format_text
-        @corpus = @corpus.gsub(/[^\sA-Za-z;.!?'"‘’“”]+/, '')
-        @corpus = @corpus.gsub(/\s{2,}/, ' ')
-        
-        @corpus.split(' ')
+    def get_entry(words)
+        next_word = words.pop
+        next_word = strip_punctuation(next_word)
+
+        gram = words.join(' ')
+        gram = strip_punctuation(gram)
+
+        [gram, next_word]
     end
 
     def strip_punctuation(text)
         text.gsub(/[;.!?"‘’“”]*/, '')
+    end
+
+    def save_entry(gram, next_word)
+        if !@dictionary[gram]
+            @dictionary[gram] = []
+        end
+
+        @dictionary[gram].push(next_word)
+    end
+
+    def save_dictionary
+        File.open('public/data/dictionary.jsonp', 'w') do |f|
+            f.write("dictionary = #{@dictionary.to_json}")
+        end
     end
 end
 
@@ -66,4 +93,7 @@ end
 #
 ######
 
-Library.new('data/annie_dillard-solar_eclipse.txt')
+Dictionary.new([
+    'annie_dillard-solar_eclipse.txt',
+    'annie_dillard-pilgrim_at_tinker_creek.txt'
+])
