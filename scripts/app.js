@@ -1,11 +1,11 @@
 class App {
     constructor() {
-        this.library     = library     // JSON variable loaded via script tag
-        this.libraryKeys = Object.keys(this.library)
+        this.dictionary     = dictionary     // JSON variable loaded via script tag
+        this.dictionaryKeys = Object.keys(this.dictionary)
         this.resultsEl   = document.getElementById('results')
 
         this.addListeners()
-        console.log(library)
+        console.log(dictionary)
     }
 
     addListeners() {
@@ -14,7 +14,7 @@ class App {
     }
 
     returnPoem() {
-        const startingGram = this.getRandomEl(this.libraryKeys)
+        const startingGram = this.getRandomEl(this.dictionaryKeys)
         const poemLength = 50
 
         const poem = this.generatePoem(startingGram, poemLength)
@@ -29,9 +29,9 @@ class App {
         currentGram = startingGram
         
         for (let i = 1; i < poemLength; i++) {
-            if (!this.library[currentGram]) break
+            if (!this.dictionary[currentGram]) break
 
-            nextGram = this.getRandomEl(this.library[currentGram])
+            nextGram = this.getRandomEl(this.dictionary[currentGram])
             poem.push(nextGram)
             currentGram = poem.slice(-1)
         }
