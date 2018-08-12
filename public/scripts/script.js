@@ -11,7 +11,7 @@ class App {
     }
 
     addListeners() {
-        const input = document.getElementById('input')
+        const input = document.getElementById('initial-input')
         input.addEventListener('keyup', (e) => this.beginComposition(e))
 
         Array.from(this.suggestionEls).forEach((el) => {
@@ -70,7 +70,7 @@ class App {
     }
 
     disableInput() {
-        const input = document.getElementById('input')
+        const input = document.getElementById('initial-input')
         input.disabled = true;
 
         this.firstWord = false        

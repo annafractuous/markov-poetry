@@ -21,9 +21,38 @@ body {
     }
 }
 
+#initial-input {
+    position: absolute;
+    opacity: 0;
+    left: calc(50% - 50px);
+    width: 100px;
+}
+
 #composition-field {
     text-align: center;
     font-size: 18px;
+}
+
+.suggestions {
+    display: flex;
+    justify-content: space-between;
+    max-width: 750px;
+}
+
+.suggestion-field {
+    width: 33.33%;
+    max-width: 250px;
+    text-align: center;
+    line-height: 25px;
+    height: 25px;
+}
+
+.suggestion-field:not(:empty) {
+    border-right: 1px solid gray;
+
+    &:first-child {
+        border-left: 1px solid gray;
+    }
 }
 
 // #generate-btn {
