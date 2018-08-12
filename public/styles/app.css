@@ -3,35 +3,22 @@ body {
   padding: 11.11%; }
 
 .header,
-#results {
+.composition {
   margin-bottom: 50px; }
 
-.header {
+.header-text {
   font-weight: bold;
   font-size: 32px;
   border-bottom: 1px solid black; }
-  .header .cursor {
+  .header-text .cursor {
     font-weight: lighter;
     color: darkgray;
     -webkit-animation: blink 1.1s step-end infinite;
     animation: blink 1.1s step-end infinite; }
 
-#results {
+#composition-field {
   text-align: center;
   font-size: 18px; }
-
-#generate-btn {
-  display: block;
-  margin: 0 auto;
-  width: 100px;
-  height: 35px;
-  border: none;
-  background: skyblue;
-  color: white;
-  font-size: 13px;
-  font-family: 'Cutive Mono', monospace;
-  text-transform: uppercase;
-  cursor: pointer; }
 
 /* Animation */
 @-webkit-keyframes blink {

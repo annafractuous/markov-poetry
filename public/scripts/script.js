@@ -2,41 +2,56 @@ class App {
     constructor() {
         this.dictionary     = dictionary     // JSON variable loaded via script tag
         this.dictionaryKeys = Object.keys(this.dictionary)
-        this.resultsEl   = document.getElementById('results')
+        this.suggestionEls  = document.getElementsByClassName('suggestion-field')
+        this.composition    = document.getElementById('composition-field')
 
         this.addListeners()
         console.log(dictionary)
     }
 
     addListeners() {
-        const generateBtn = document.getElementById('generate-btn')
-        generateBtn.addEventListener('click', () => this.returnPoem())
+        const input = document.getElementById('input')
+        input.addEventListener('keyup', (e) => this.offerSuggestions(e))
+
+        Array.from(this.suggestionEls).forEach((el) => {
+            el.addEventListener('click', (e) => this.addToComposition(e))
+        })
     }
 
-    returnPoem() {
-        const startingGram = this.getRandomEl(this.dictionaryKeys)
-        const poemLength = 50
-
-        const poem = this.generatePoem(startingGram, poemLength)
-        
-        this.resultsEl.innerText = poem
+    offerSuggestions(e) {
+        const word = e.target.value
+        this.getSuggestions(word)
     }
 
-    generatePoem(startingGram, poemLength) {
-        let poem, currentGram, nextGram
+    getSuggestions(word) {
+        const possibilities = this.dictionary[word]
+        if (possibilities) {
+            let suggestions = []
 
-        poem = Array(startingGram)
-        currentGram = startingGram
-        
-        for (let i = 1; i < poemLength; i++) {
-            if (!this.dictionary[currentGram]) break
-
-            nextGram = this.getRandomEl(this.dictionary[currentGram])
-            poem.push(nextGram)
-            currentGram = poem.slice(-1)
+            if (possibilities.length <= 3) {
+                suggestions = [...possibilities]
+            } else {
+                while (suggestions.length < 3) {
+                    let suggestion = this.getRandomEl(possibilities)
+                    if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
+                }
+            }
+            
+            this.returnSuggestions(suggestions)
         }
+    }
 
-        return poem.join(' ')
+    returnSuggestions(suggestions) {
+        for (let i = 0, l = suggestions.length; i < l; i++) {
+            this.suggestionEls[i].innerText = suggestions[i]
+        }
+    }
+
+    addToComposition(e) {
+        const word = e.target.innerText
+        if (word) {
+            this.composition.innerText += word
+        }
     }
 
     getRandomEl(array) {
