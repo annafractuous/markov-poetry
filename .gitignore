@@ -1,3 +1,5 @@
 node_modules/
 .gulp-scss-cache
 .sass-cache
+
+data/anna_fractuous-source_texts.txt

@@ -95,5 +95,6 @@ end
 
 Dictionary.new([
     'annie_dillard-solar_eclipse.txt',
-    'annie_dillard-pilgrim_at_tinker_creek.txt'
+    'annie_dillard-pilgrim_at_tinker_creek.txt',
+    'anna_fractuous-source_texts.txt'
 ])
