@@ -4,6 +4,7 @@ class App {
         this.dictionaryKeys = Object.keys(this.dictionary)
         this.suggestionEls  = document.getElementsByClassName('suggestion-field')
         this.composition    = document.getElementById('composition-field')
+        this.firstWord      = true
 
         this.addListeners()
         console.log(dictionary)
@@ -11,23 +12,25 @@ class App {
 
     addListeners() {
         const input = document.getElementById('input')
-        input.addEventListener('keyup', (e) => this.offerSuggestions(e))
+        input.addEventListener('keyup', (e) => this.beginComposition(e))
 
         Array.from(this.suggestionEls).forEach((el) => {
-            el.addEventListener('click', (e) => this.addToComposition(e))
+            el.addEventListener('click', (e) => this.updateComposition(e))
         })
     }
 
-    offerSuggestions(e) {
+    beginComposition(e) {
         const word = e.target.value
+        
+        this.composition.innerText = e.target.value
         this.getSuggestions(word)
     }
 
     getSuggestions(word) {
         const possibilities = this.dictionary[word]
+        let suggestions = []
+        
         if (possibilities) {
-            let suggestions = []
-
             if (possibilities.length <= 3) {
                 suggestions = [...possibilities]
             } else {
@@ -35,31 +38,42 @@ class App {
                     let suggestion = this.getRandomEl(possibilities)
                     if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
                 }
-            }
-            
-            this.returnSuggestions(suggestions)
-        } else {
-            this.clearSuggestions()
+            }   
         }
+        
+        this.returnSuggestions(suggestions)
     }
 
     returnSuggestions(suggestions) {
-        for (let i = 0, l = suggestions.length; i < l; i++) {
-            this.suggestionEls[i].innerText = suggestions[i]
-        }
-    }
-
-    clearSuggestions() {
         for (let i = 0, l = 3; i < l; i++) {
-            this.suggestionEls[i].innerText = ''
+            if (suggestions[i]) {
+                this.suggestionEls[i].innerText = suggestions[i]
+            } else {
+                this.suggestionEls[i].innerText = ''
+            }
         }
     }
 
-    addToComposition(e) {
+    updateComposition(e) {
         const word = e.target.innerText
+        
         if (word) {
-            this.composition.innerText += word
+            this.addToComposition(word)
+            this.getSuggestions(word)
+            
+            if (this.firstWord) this.disableInput()
         }
+    }
+
+    addToComposition(word) {
+        this.composition.innerText += ' ' + word
+    }
+
+    disableInput() {
+        const input = document.getElementById('input')
+        input.disabled = true;
+
+        this.firstWord = false        
     }
 
     getRandomEl(array) {
