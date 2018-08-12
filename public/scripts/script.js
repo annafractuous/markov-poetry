@@ -11,11 +11,27 @@ class App {
     }
 
     addListeners() {
+        this.typingListener()
+        this.selectionListener()
+        this.backspaceListener()
+    }
+
+    typingListener() {
         const input = document.getElementById('initial-input')
         input.addEventListener('keyup', (e) => this.beginComposition(e))
+    }
 
+    selectionListener() {
         Array.from(this.suggestionEls).forEach((el) => {
             el.addEventListener('click', (e) => this.updateComposition(e))
+        })
+    }
+
+    backspaceListener() {
+        window.addEventListener('keyup', (e) => {
+            if (!this.firstWord && e.keyCode === 8) {
+                this.deleteLastWord()
+            }
         })
     }
 
@@ -74,6 +90,16 @@ class App {
         input.disabled = true;
 
         this.firstWord = false        
+    }
+
+    deleteLastWord() {
+        const currentComposition = this.composition.innerText
+        const words = currentComposition.split(' ')
+
+        words.pop()
+
+        this.composition.innerText = words.join(' ')
+        this.getSuggestions(words.slice(-1))
     }
 
     getRandomEl(array) {
