@@ -38,12 +38,20 @@ class App {
             }
             
             this.returnSuggestions(suggestions)
+        } else {
+            this.clearSuggestions()
         }
     }
 
     returnSuggestions(suggestions) {
         for (let i = 0, l = suggestions.length; i < l; i++) {
             this.suggestionEls[i].innerText = suggestions[i]
+        }
+    }
+
+    clearSuggestions() {
+        for (let i = 0, l = 3; i < l; i++) {
+            this.suggestionEls[i].innerText = ''
         }
     }
 
