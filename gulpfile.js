@@ -32,7 +32,7 @@ gulp.task('styles',function(cb) {
 */
 gulp.task('scripts', function(cb) {
     pump([
-        gulp.src('scripts/*.js'),
+        gulp.src('scripts/app.js'),
         concat('script.js'),
         gulp.dest('public/scripts'),
         babel({ presets: ['env'] }),
