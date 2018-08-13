@@ -1,6 +1,6 @@
 class App {
     constructor() {
-        this.dictionary     = dictionary     // JSON variable loaded via script tag
+        this.dictionary     = dictionary     // JSONP variable loaded via script tag
         this.dictionaryKeys = Object.keys(this.dictionary)
         this.suggestionEls  = document.getElementsByClassName('suggestion-field')
         this.composition    = document.getElementById('composition-field')
@@ -37,7 +37,7 @@ class App {
 
     beginComposition(e) {
         const word = e.target.value
-        
+
         this.composition.innerText = e.target.value
         this.getSuggestions(word)
     }
@@ -45,18 +45,20 @@ class App {
     getSuggestions(word) {
         const possibilities = this.dictionary[word]
         let suggestions = []
-        
+
         if (possibilities) {
-            if (possibilities.length <= 3) {
-                suggestions = [...possibilities]
+            const uniquePossibilities = this.makeUnique(possibilities)
+
+            if (uniquePossibilities.length <= 3) {
+                suggestions = uniquePossibilities
             } else {
                 while (suggestions.length < 3) {
                     let suggestion = this.getRandomEl(possibilities)
                     if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
                 }
-            }   
+            }
         }
-        
+
         this.returnSuggestions(suggestions)
     }
 
@@ -72,11 +74,11 @@ class App {
 
     updateComposition(e) {
         const word = e.target.innerText
-        
+
         if (word) {
             this.addToComposition(word)
             this.getSuggestions(word)
-            
+
             if (this.firstWord) this.disableInput()
         }
     }
@@ -89,7 +91,7 @@ class App {
         const input = document.getElementById('initial-input')
         input.disabled = true;
 
-        this.firstWord = false        
+        this.firstWord = false
     }
 
     deleteLastWord() {
@@ -100,6 +102,10 @@ class App {
 
         this.composition.innerText = words.join(' ')
         this.getSuggestions(words.slice(-1))
+    }
+
+    makeUnique(array) {
+        return [...new Set(array)]
     }
 
     getRandomEl(array) {
