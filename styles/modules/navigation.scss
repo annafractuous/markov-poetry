@@ -1,0 +1,34 @@
+.navigation {
+    position: absolute;
+    top: 25px;
+}
+
+.nav-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+}
+
+.nav-list-item {
+    margin-right: 20px;
+    font-size: 14px;
+    color: gray;
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &.active-nav-item {
+        font-weight: bold;
+        cursor: default;
+    }
+
+    &:not(.active-nav-item) {
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
