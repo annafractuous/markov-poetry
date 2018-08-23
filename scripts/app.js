@@ -2,18 +2,33 @@ class App {
     constructor() {
         this.dictionary     = dictionary     // JSONP variable loaded via script tag
         this.dictionaryKeys = Object.keys(this.dictionary)
-        this.suggestionEls  = document.getElementsByClassName('suggestion-field')
-        this.composition    = document.getElementById('composition-field')
         this.firstWord      = true
 
+        this.saveElements()
         this.addListeners()
+        
         console.log(dictionary)
     }
 
+    saveElements() {
+        this.activePage     = document.querySelector('.active-page')
+        this.activeNav      = document.querySelector('.active-nav-item')
+        this.suggestionEls  = document.querySelectorAll('.suggestion-field')
+        this.composition    = document.querySelector('#composition-field')
+    }
+
     addListeners() {
+        this.navListener()
         this.typingListener()
         this.selectionListener()
         this.backspaceListener()
+    }
+
+    navListener() {
+        const navItems = document.querySelectorAll('.nav-list-item')
+        navItems.forEach((el) => {
+            el.addEventListener('click', (e) => this.clickNavItem(e))
+        })
     }
 
     typingListener() {
@@ -22,7 +37,7 @@ class App {
     }
 
     selectionListener() {
-        Array.from(this.suggestionEls).forEach((el) => {
+        this.suggestionEls.forEach((el) => {
             el.addEventListener('click', (e) => this.updateComposition(e))
         })
     }
@@ -33,6 +48,36 @@ class App {
                 this.deleteLastWord()
             }
         })
+    }
+
+    clickNavItem(e) {
+        const pageSelection = e.currentTarget.dataset.page
+        const nextPage = document.getElementById(pageSelection)
+
+        if (nextPage !== this.activePage) {
+            this.navigate(nextPage)
+            this.updateActiveNav(pageSelection)
+        }
+    }
+
+    navigate(nextPage) {
+        this.activePage.classList.add('slide-out')
+        nextPage.classList.add('slide-in')
+
+        setTimeout(() => {
+            this.activePage.classList.remove('active-page')
+            this.activePage.classList.remove('slide-out')
+            nextPage.classList.add('active-page')
+            nextPage.classList.remove('slide-in')
+            
+            this.activePage = nextPage;
+        }, 300)     // 300ms = sliding transition speed
+    }
+
+    updateActiveNav(pageSelection) {
+        const nextNav = document.querySelector('[data-page=' + pageSelection)
+        this.activeNav.classList.remove('active-nav-item')
+        nextNav.classList.add('active-nav-item')
     }
 
     beginComposition(e) {

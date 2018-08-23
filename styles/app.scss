@@ -1,17 +1,58 @@
 body {
     font-family: 'Cutive Mono',monospace;
     padding: 11.11%;
+    margin: 0;
+    position: relative;
 }
 
-.header,
-.composition {
-    margin-bottom: 50px;
+body * {
+    box-sizing: border-box;
+}
+
+.navigation {
+    position: absolute;
+    top: 25px;
+}
+
+.nav-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+}
+
+.nav-list-item {
+    margin-right: 20px;
+    font-size: 14px;
+    color: gray;
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &.active-nav-item {
+        font-weight: bold;
+        cursor: default;
+    }
+
+    &:not(.active-nav-item) {
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.header {
+    margin: 15px 0 50px 0;
 }
 
 .header-text {
     font-weight: bold;
     font-size: 32px;
     border-bottom: 1px solid black;
+    cursor: default;
 }
 
 .cursor {
@@ -19,11 +60,35 @@ body {
     color: darkgray;
 }
 
+.page {
+    position: absolute;
+    width: 77.88%;          // 100% - (2 * 11.11% padding)
+    left: -100vw;
+
+    &.active-page {
+        left: 11.11%;
+    }
+
+    &.active-page.slide-out {
+        left: 100vw;
+        transition: left ease 300ms;
+    }
+    
+    &.slide-in {
+        left: 11.11%;
+        transition: left ease 300ms;
+    }
+}
+
 #initial-input {
     position: absolute;
     opacity: 0;
     left: calc(50% - 50px);
     width: 100px;
+}
+
+.composition {
+    margin-bottom: 50px;
 }
 
 .composition-container {

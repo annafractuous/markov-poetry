@@ -9,25 +9,47 @@
     <title>Muse Machina</title>
 </head>
 <body>
+
+    <!-- GLOBAL ELEMENTS -->
+    <nav class="navigation">
+        <ul class="nav-list">
+            <li class="nav-list-item active-nav-item" id="compose-link" data-page="compose-page" role="link">Compose</li>
+            <li class="nav-list-item" id="museum-link" data-page="museum-page" role="link">Museum</li>
+        </ul>
+    </nav>
+
     <header class="header">
         <h1 class="header-text">Muse Machina<span class="cursor">|</span></h1>
     </header>
+    <!-- / GLOBAL ELEMENTS -->
 
-    <section class="composition">
-        <input id="initial-input" autofocus>
-        <p class="composition-container">
-            <span id="composition-field">In a word, begin...</span>
-            <span class="cursor">|</span>
-        </p>
-    </section>
-    
-    <section class="suggestions">
-        <div class="suggestion-field"></div>
-        <div class="suggestion-field"></div>
-        <div class="suggestion-field"></div>
-    </section>
-    
-    <!-- <button id="generate-btn">Compose</button> -->
+
+    <!-- COMPOSE PAGE -->
+    <article class="page active-page" id="compose-page" aria-labelledby="compose-link">
+        <section class="composition">
+            <input id="initial-input" autofocus>
+            <p class="composition-container">
+                <span id="composition-field">In a word, begin...</span>
+                <span class="cursor">|</span>
+            </p>
+        </section>
+        
+        <section class="suggestions">
+            <div class="suggestion-field"></div>
+            <div class="suggestion-field"></div>
+            <div class="suggestion-field"></div>
+        </section>
+        
+        <!-- <button id="generate-btn">Compose</button> -->
+    </article>
+    <!-- / COMPOSE PAGE -->
+
+
+    <!-- MUSEUM PAGE -->
+    <article class="page" id="museum-page" aria-labelledby="museum-link">
+        Museum
+    </article>
+    <!-- / MUSEUM PAGE -->
 
     <script src="public/data/dictionary.jsonp"></script>
     <script src="public/scripts/script.js"></script>
