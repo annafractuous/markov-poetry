@@ -1,2 +1,2 @@
-# markov-poetry
+# Muse Machina
 Poetry/prose predictive text generator.

@@ -1,5 +1,5 @@
 {
-  "name": "markov-poetry",
+  "name": "muse-machina",
   "version": "1.0.0",
   "description": "A poetry/prose predictive text generator.",
   "main": "script.js",
