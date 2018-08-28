@@ -114,5 +114,5 @@ class App {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    new App();
+    MuseMachina = new App();
 });
