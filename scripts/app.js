@@ -4,6 +4,7 @@ class App {
         this.dictionaryKeys = Object.keys(this.dictionary)
         this.suggestionEls  = document.getElementsByClassName('suggestion-field')
         this.composition    = document.getElementById('composition-field')
+        this.input          = document.getElementById('initial-input')
         this.firstWord      = true
 
         this.addListeners()
@@ -17,8 +18,7 @@ class App {
     }
 
     typingListener() {
-        const input = document.getElementById('initial-input')
-        input.addEventListener('keyup', (e) => this.beginComposition(e))
+        this.input.addEventListener('keyup', (e) => this.beginComposition(e))
     }
 
     selectionListener() {
@@ -88,9 +88,7 @@ class App {
     }
 
     disableInput() {
-        const input = document.getElementById('initial-input')
-        input.disabled = true;
-
+        this.input.disabled = true
         this.firstWord = false
     }
 
@@ -102,6 +100,16 @@ class App {
 
         this.composition.innerText = words.join(' ')
         this.getSuggestions(words.slice(-1))
+
+        if (!words.length) this.restartComposition()
+    }
+
+    restartComposition() {
+        this.input.disabled = false
+        this.input.value = ''
+        this.input.focus()
+
+        this.firstWord = true
     }
 
     makeUnique(array) {
@@ -114,5 +122,5 @@ class App {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    new App();
+    MuseMachina = new App();
 });
