@@ -7,8 +7,37 @@ class App {
         this.input          = document.getElementById('initial-input')
         this.firstWord      = true
 
+        this.initializeFirebase()
+        // this.saveTestPoem()
         this.addListeners()
         console.log(dictionary)
+    }
+
+    initializeFirebase() {
+        this.db = firebase.database()
+        this.poems = this.db.ref('poems')
+
+        this.fetchPoems()
+    }
+
+    fetchPoems() {
+        this.poems.on('value', function(snapshot) {
+            console.log(snapshot.val());
+        }, function (errorObject) {
+            console.log('The read failed: ', errorObject);
+        });
+    }
+
+    saveTestPoem() {
+        const key = this.poems.push().key
+        const poem = {}
+
+        poem[key] = {
+            poem: 'test2',
+            user: 'annafractuous'
+        }
+
+        this.poems.update(poem)
     }
 
     addListeners() {
