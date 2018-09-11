@@ -5,6 +5,8 @@ class App {
         this.firstWord      = true
 
         this.saveElements()
+        this.initializeFirebase()
+        // this.saveTestPoem()
         this.addListeners()
         
         console.log(dictionary)
@@ -15,6 +17,34 @@ class App {
         this.activeNav      = document.querySelector('.active-nav-item')
         this.suggestionEls  = document.querySelectorAll('.suggestion-field')
         this.composition    = document.querySelector('#composition-field')
+        this.input          = document.getElementById('initial-input')
+    }
+    
+    initializeFirebase() {
+        this.db = firebase.database()
+        this.poems = this.db.ref('poems')
+
+        this.fetchPoems()
+    }
+
+    fetchPoems() {
+        this.poems.on('value', function(snapshot) {
+            console.log(snapshot.val());
+        }, function (errorObject) {
+            console.log('The read failed: ', errorObject);
+        });
+    }
+
+    saveTestPoem() {
+        const key = this.poems.push().key
+        const poem = {}
+
+        poem[key] = {
+            poem: 'test2',
+            user: 'annafractuous'
+        }
+
+        this.poems.update(poem)
     }
 
     addListeners() {
@@ -32,8 +62,7 @@ class App {
     }
 
     typingListener() {
-        const input = document.getElementById('initial-input')
-        input.addEventListener('keyup', (e) => this.beginComposition(e))
+        this.input.addEventListener('keyup', (e) => this.beginComposition(e))
     }
 
     selectionListener() {
@@ -133,9 +162,7 @@ class App {
     }
 
     disableInput() {
-        const input = document.getElementById('initial-input')
-        input.disabled = true;
-
+        this.input.disabled = true
         this.firstWord = false
     }
 
@@ -147,6 +174,16 @@ class App {
 
         this.composition.innerText = words.join(' ')
         this.getSuggestions(words.slice(-1))
+
+        if (!words.length) this.restartComposition()
+    }
+
+    restartComposition() {
+        this.input.disabled = false
+        this.input.value = ''
+        this.input.focus()
+
+        this.firstWord = true
     }
 
     makeUnique(array) {
@@ -159,5 +196,5 @@ class App {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    new App();
+    MuseMachina = new App();
 });
