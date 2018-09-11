@@ -5,46 +5,67 @@ class App {
         this.firstWord      = true
 
         this.saveElements()
-        this.initializeFirebase()
-        // this.saveTestPoem()
         this.addListeners()
+        this.loadMuseum()
         
         console.log(dictionary)
     }
 
     saveElements() {
-        this.activePage     = document.querySelector('.active-page')
-        this.activeNav      = document.querySelector('.active-nav-item')
-        this.suggestionEls  = document.querySelectorAll('.suggestion-field')
-        this.composition    = document.querySelector('#composition-field')
-        this.input          = document.getElementById('initial-input')
+        this.activePage    = document.querySelector('.active-page')
+        this.activeNav     = document.querySelector('.active-nav-item')
+        this.museumEntries = document.querySelector('.musem-entries')
+        this.suggestionEls = document.querySelectorAll('.suggestion-field')
+        this.composition   = document.querySelector('#composition-field')
+        this.input         = document.querySelector('#initial-input')
+    }
+
+    loadMuseum() {
+        this.initializeFirebase()
+        this.fetchPoems()
     }
     
     initializeFirebase() {
         this.db = firebase.database()
-        this.poems = this.db.ref('poems')
-
-        this.fetchPoems()
+        this.poemsDB = this.db.ref('poems')
     }
 
     fetchPoems() {
-        this.poems.on('value', function(snapshot) {
-            console.log(snapshot.val());
-        }, function (errorObject) {
+        // TO DO: 
+        // // 1. paginate or lazy-load the museum, loading 20 at a time
+        // // 2. save the first 20 to localStorage
+        this.poemsDB.limitToLast(20).on('value', (snapshot) => {
+            this.displayPoems(snapshot.val());
+        }, (errorObject) => {
             console.log('The read failed: ', errorObject);
         });
     }
 
-    saveTestPoem() {
-        const key = this.poems.push().key
-        const poem = {}
+    displayPoems(poems) {
+        poems = Object.values(poems)
+        poems.forEach((poem) => this.displayPoem(poem))
+    }
 
-        poem[key] = {
-            poem: 'test2',
-            user: 'annafractuous'
+    displayPoem(poem) {
+        const html = `
+            <div class="museum-entry">
+                <p class="poem-text">${poem.poem}</p>
+                <p class="poem-composer">${poem.user}</p>
+            </div>
+        `
+        this.museumEntries.innerHTML += html
+    }
+
+    savePoem(poem, user) {
+        const key = this.poemsDB.push().key
+        const data = {}
+
+        data[key] = {
+            poem: poem,
+            user: user
         }
 
-        this.poems.update(poem)
+        this.poemsDB.update(data)
     }
 
     addListeners() {
