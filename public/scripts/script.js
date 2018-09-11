@@ -42,7 +42,7 @@ class App {
     }
 
     displayPoems(poems) {
-        poems = Object.values(poems)
+        poems = Object.values(poems).reverse()
         poems.forEach((poem) => this.displayPoem(poem))
     }
 
