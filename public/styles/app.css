@@ -60,10 +60,12 @@ body {
       text-decoration: underline; }
 
 #initial-input {
+  font-size: 18px;
   position: absolute;
+  left: calc(50% - 120px);
+  width: 215px;
   opacity: 0;
-  left: calc(50% - 50px);
-  width: 100px; }
+  caret-color: transparent; }
 
 .composition {
   margin-bottom: 50px; }

@@ -83,7 +83,7 @@ class App {
     }
 
     typingListener() {
-        this.input.addEventListener('keyup', (e) => this.beginComposition(e))
+        this.input.addEventListener('input', (e) => this.beginComposition(e))
     }
 
     selectionListener() {
@@ -131,9 +131,9 @@ class App {
     }
 
     beginComposition(e) {
-        const word = e.target.value
+        const word = e.target.value.trim().toLowerCase()
 
-        this.composition.innerText = e.target.value
+        this.composition.innerText = word
         this.getSuggestions(word)
     }
 
