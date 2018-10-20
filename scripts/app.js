@@ -5,6 +5,7 @@ class App {
         this.suggestionEls  = document.getElementsByClassName('suggestion-field')
         this.composition    = document.getElementById('composition-field')
         this.input          = document.getElementById('initial-input')
+        this.defaultText    = this.composition.innerText
         this.firstWord      = true
 
         this.addListeners()
@@ -12,9 +13,19 @@ class App {
     }
 
     addListeners() {
+        this.activeListener()
+        this.inactiveListener()
         this.typingListener()
         this.selectionListener()
         this.backspaceListener()
+    }
+
+    activeListener() {
+        this.input.addEventListener('click', () => this.clearDefaultText())
+    }
+    
+    inactiveListener() {
+        window.addEventListener('click', (e) => this.replaceDefaultText(e))
     }
 
     typingListener() {
@@ -35,8 +46,24 @@ class App {
         })
     }
 
+    clearDefaultText() {
+        if (this.input.value == '') {
+            this.composition.innerText = ''
+        }
+    }
+
+    replaceDefaultText(e) {
+        if (e.target.id !== 'initial-input' && this.input.value == '') {
+            this.composition.innerText = this.defaultText
+        }
+    }
+
     beginComposition(e) {
-        const word = e.target.value.trim().toLowerCase()
+        let word 
+        
+        word = e.target.value
+        word = word.split(' ')[0]
+        word = word.trim().toLowerCase()
 
         this.composition.innerText = word
         this.getSuggestions(word)

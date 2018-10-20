@@ -1,6 +1,9 @@
 body {
   font-family: 'Cutive Mono',monospace;
-  padding: 11.11%; }
+  padding: 5%; }
+  @media (min-width: 768px) {
+    body {
+      padding: 11.11%; } }
 
 .header,
 .composition {
