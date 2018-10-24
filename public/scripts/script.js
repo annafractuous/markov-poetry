@@ -34,7 +34,7 @@ class App {
     activeListener() {
         this.input.addEventListener('click', () => this.clearDefaultText())
     }
-    
+
     inactiveListener() {
         window.addEventListener('click', (e) => this.replaceDefaultText(e))
     }
@@ -66,19 +66,23 @@ class App {
 /* INPUT /------- */
 
     readInput(e) {
-        let word 
-        
+        let word
+
         word = e.target.value
         word = word.split(' ')[0]
         word = word.trim().toLowerCase()
 
         this.composition.innerText = word
+
         this.getSuggestions(word)
+
+        const buttonsDisabled = !word.length
+        this.toggleButtonsState(buttonsDisabled)
     }
 
     disableInput() {
         this.input.disabled = true
-        this.firstWord = false        
+        this.firstWord = false
     }
 
     enableInput() {
@@ -100,7 +104,6 @@ class App {
 
             if (this.firstWord) {
                 this.disableInput()
-                this.toggleButtonsState(false)
             }
         }
     }
