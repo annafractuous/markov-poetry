@@ -5,6 +5,9 @@ class App {
         this.suggestionEls  = document.getElementsByClassName('suggestion-field')
         this.composition    = document.getElementById('composition-field')
         this.input          = document.getElementById('initial-input')
+        this.restartBtn     = document.getElementById('restart-btn')
+        this.refreshBtn     = document.getElementById('refresh-btn')
+        this.backBtn        = document.getElementById('back-btn')
         this.defaultText    = this.composition.innerText
         this.firstWord      = true
 
@@ -16,8 +19,9 @@ class App {
         this.activeListener()
         this.inactiveListener()
         this.typingListener()
-        this.selectionListener()
         this.backspaceListener()
+        this.selectionListener()
+        this.buttonListeners()
     }
 
     activeListener() {
@@ -32,18 +36,24 @@ class App {
         this.input.addEventListener('input', (e) => this.beginComposition(e))
     }
 
+    backspaceListener() {
+        window.addEventListener('keyup', (e) => {
+            if (e.keyCode === 8 && !this.firstWord) {
+                this.deleteLastWord()
+            }
+        })
+    }
+
     selectionListener() {
-        Array.from(this.suggestionEls).forEach((el) => {
+        [...this.suggestionEls].forEach((el) => {
             el.addEventListener('click', (e) => this.updateComposition(e))
         })
     }
 
-    backspaceListener() {
-        window.addEventListener('keyup', (e) => {
-            if (!this.firstWord && e.keyCode === 8) {
-                this.deleteLastWord()
-            }
-        })
+    buttonListeners() {
+        this.restartBtn.addEventListener('click', () => this.restartComposition())
+        this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
+        this.backBtn.addEventListener('click', () => this.deleteLastWord())
     }
 
     clearDefaultText() {
@@ -99,6 +109,24 @@ class App {
         }
     }
 
+    refreshSuggestions() {
+        const lastWord = this.getLastWord()
+        this.getSuggestions(lastWord)
+    }
+
+    clearSuggestions() {
+        [...this.suggestionEls].forEach((suggestion) => {
+            suggestion.innerText = ''
+        })
+    }
+
+    getLastWord() {
+        const words = this.composition.innerText.split(' ')
+        const lastIdx = words.length - 1
+
+        return words[lastIdx]
+    }
+
     updateComposition(e) {
         const word = e.target.innerText
 
@@ -117,18 +145,27 @@ class App {
     disableInput() {
         this.input.disabled = true
         this.firstWord = false
+        
+        this.toggleButtonsState(false)
+    }
+
+    toggleButtonsState(disabledState) {
+        [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
+            disabledState ? btn.classList.add('disabled') : btn.classList.remove('disabled')
+        })
     }
 
     deleteLastWord() {
-        const currentComposition = this.composition.innerText
-        const words = currentComposition.split(' ')
+        const words = this.composition.innerText.split(' ')
 
         words.pop()
 
-        this.composition.innerText = words.join(' ')
-        this.getSuggestions(words.slice(-1))
-
-        if (!words.length) this.restartComposition()
+        if (words.length) {
+            this.composition.innerText = words.join(' ')
+            this.refreshSuggestions()
+        } else {
+            this.restartComposition()
+        }
     }
 
     restartComposition() {
@@ -136,7 +173,11 @@ class App {
         this.input.value = ''
         this.input.focus()
 
+        this.composition.innerText = ''
         this.firstWord = true
+
+        this.clearSuggestions()
+        this.toggleButtonsState(true)
     }
 
     makeUnique(array) {

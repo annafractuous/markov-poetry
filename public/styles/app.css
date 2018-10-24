@@ -65,7 +65,8 @@ body {
 
 .buttons {
   display: flex;
-  justify-content: center; }
+  justify-content: center;
+  margin-top: 40px; }
 
 .button {
   height: 35px;
