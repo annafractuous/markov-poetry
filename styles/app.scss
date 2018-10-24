@@ -84,8 +84,8 @@ body {
 }
 
 .button {
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width:  30px;
     margin-right: 10px;
     border-radius: 50%;
     border: none;
@@ -109,6 +109,11 @@ body {
 
     &.disabled {
         opacity: .5;
+    }
+
+    @media (min-width: 550px) {
+        height: 35px;
+        width:  35px;
     }
 }
 

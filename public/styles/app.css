@@ -69,8 +69,8 @@ body {
   margin-top: 40px; }
 
 .button {
-  height: 35px;
-  width: 35px;
+  height: 30px;
+  width: 30px;
   margin-right: 10px;
   border-radius: 50%;
   border: none;
@@ -87,6 +87,10 @@ body {
     background-image: url(../assets/backspace-key.png); }
   .button.disabled {
     opacity: .5; }
+  @media (min-width: 550px) {
+    .button {
+      height: 35px;
+      width: 35px; } }
 
 /* Animation */
 @-webkit-keyframes blink {
