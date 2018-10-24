@@ -1,18 +1,23 @@
 class App {
     constructor() {
+        this.saveSelectors()
+        this.addListeners()
+
         this.dictionary     = dictionary     // JSONP variable loaded via script tag
         this.dictionaryKeys = Object.keys(this.dictionary)
-        this.suggestionEls  = document.getElementsByClassName('suggestion-field')
-        this.composition    = document.getElementById('composition-field')
-        this.input          = document.getElementById('initial-input')
-        this.restartBtn     = document.getElementById('restart-btn')
-        this.refreshBtn     = document.getElementById('refresh-btn')
-        this.backBtn        = document.getElementById('back-btn')
         this.defaultText    = this.composition.innerText
         this.firstWord      = true
 
-        this.addListeners()
         console.log(dictionary)
+    }
+
+    saveSelectors() {
+        this.suggestionEls = document.getElementsByClassName('suggestion-field')
+        this.composition   = document.getElementById('composition-field')
+        this.input         = document.getElementById('initial-input')
+        this.restartBtn    = document.getElementById('restart-btn')
+        this.refreshBtn    = document.getElementById('refresh-btn')
+        this.backBtn       = document.getElementById('back-btn')
     }
 
     addListeners() {
@@ -24,6 +29,8 @@ class App {
         this.buttonListeners()
     }
 
+/* LISTENERS /------- */
+
     activeListener() {
         this.input.addEventListener('click', () => this.clearDefaultText())
     }
@@ -33,7 +40,7 @@ class App {
     }
 
     typingListener() {
-        this.input.addEventListener('input', (e) => this.beginComposition(e))
+        this.input.addEventListener('input', (e) => this.readInput(e))
     }
 
     backspaceListener() {
@@ -56,19 +63,9 @@ class App {
         this.backBtn.addEventListener('click', () => this.deleteLastWord())
     }
 
-    clearDefaultText() {
-        if (this.input.value == '') {
-            this.composition.innerText = ''
-        }
-    }
+/* INPUT /------- */
 
-    replaceDefaultText(e) {
-        if (e.target.id !== 'initial-input' && this.input.value == '') {
-            this.composition.innerText = this.defaultText
-        }
-    }
-
-    beginComposition(e) {
+    readInput(e) {
         let word 
         
         word = e.target.value
@@ -78,6 +75,69 @@ class App {
         this.composition.innerText = word
         this.getSuggestions(word)
     }
+
+    disableInput() {
+        this.input.disabled = true
+        this.firstWord = false        
+    }
+
+    enableInput() {
+        this.input.disabled = false
+        this.input.value = ''
+        this.input.focus()
+
+        this.firstWord = true
+    }
+
+/* COMPOSITION /------- */
+
+    updateComposition(e) {
+        const word = e.target.innerText
+
+        if (word) {
+            this.addNextWord(word)
+            this.getSuggestions(word)
+
+            if (this.firstWord) {
+                this.disableInput()
+                this.toggleButtonsState(false)
+            }
+        }
+    }
+
+    addNextWord(word) {
+        this.composition.innerText += ' ' + word
+    }
+
+    deleteLastWord() {
+        const words = this.composition.innerText.split(' ')
+
+        words.pop()
+
+        if (words.length) {
+            this.composition.innerText = words.join(' ')
+            this.refreshSuggestions()
+        } else {
+            this.restartComposition()
+        }
+    }
+
+    getLastWord() {
+        const words = this.composition.innerText.split(' ')
+        const lastIdx = words.length - 1
+
+        return words[lastIdx]
+    }
+
+    restartComposition() {
+        this.composition.innerText = ''
+
+        this.enableInput()
+        this.clearSuggestions()
+        this.toggleButtonsState(true)
+    }
+
+/* SUGGESTIONS /------- */
 
     getSuggestions(word) {
         const possibilities = this.dictionary[word]
@@ -120,34 +180,7 @@ class App {
         })
     }
 
-    getLastWord() {
-        const words = this.composition.innerText.split(' ')
-        const lastIdx = words.length - 1
-
-        return words[lastIdx]
-    }
-
-    updateComposition(e) {
-        const word = e.target.innerText
-
-        if (word) {
-            this.addToComposition(word)
-            this.getSuggestions(word)
-
-            if (this.firstWord) this.disableInput()
-        }
-    }
-
-    addToComposition(word) {
-        this.composition.innerText += ' ' + word
-    }
-
-    disableInput() {
-        this.input.disabled = true
-        this.firstWord = false
-        
-        this.toggleButtonsState(false)
-    }
+/* UI STATES /------- */
 
     toggleButtonsState(disabledState) {
         [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
@@ -155,30 +188,19 @@ class App {
         })
     }
 
-    deleteLastWord() {
-        const words = this.composition.innerText.split(' ')
-
-        words.pop()
-
-        if (words.length) {
-            this.composition.innerText = words.join(' ')
-            this.refreshSuggestions()
-        } else {
-            this.restartComposition()
+    clearDefaultText() {
+        if (this.input.value == '') {
+            this.composition.innerText = ''
         }
     }
 
-    restartComposition() {
-        this.input.disabled = false
-        this.input.value = ''
-        this.input.focus()
-
-        this.composition.innerText = ''
-        this.firstWord = true
-
-        this.clearSuggestions()
-        this.toggleButtonsState(true)
+    replaceDefaultText(e) {
+        if (e.target.id !== 'initial-input' && this.input.value == '') {
+            this.composition.innerText = this.defaultText
+        }
     }
+
+/* UTILS /------- */
 
     makeUnique(array) {
         return [...new Set(array)]
