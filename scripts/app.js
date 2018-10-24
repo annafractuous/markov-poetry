@@ -16,8 +16,8 @@ class App {
         this.composition   = document.getElementById('composition-field')
         this.input         = document.getElementById('initial-input')
         this.restartBtn    = document.getElementById('restart-btn')
-        this.refreshBtn    = document.getElementById('refresh-btn')
         this.backBtn       = document.getElementById('back-btn')
+        // this.refreshBtn    = document.getElementById('refresh-btn')
     }
 
     addListeners() {
@@ -59,8 +59,8 @@ class App {
 
     buttonListeners() {
         this.restartBtn.addEventListener('click', () => this.restartComposition())
-        this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
         this.backBtn.addEventListener('click', () => this.deleteLastWord())
+        // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
     }
 
 /* INPUT /------- */
@@ -186,7 +186,8 @@ class App {
 /* UI STATES /------- */
 
     toggleButtonsState(disabledState) {
-        [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
+        // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
+        [this.restartBtn, this.backBtn].forEach((btn) => {
             disabledState ? btn.classList.add('disabled') : btn.classList.remove('disabled')
         })
     }
