@@ -92,6 +92,10 @@ body {
       height: 35px;
       width: 35px; } }
 
+.sr-only {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px); }
+
 /* Animation */
 @-webkit-keyframes blink {
   0% {

@@ -117,6 +117,11 @@ body {
     }
 }
 
+.sr-only {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
 // #generate-btn {
 //     display: block;
 //     margin: 0 auto;
