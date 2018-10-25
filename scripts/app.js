@@ -1,73 +1,146 @@
 class App {
     constructor() {
+        this.saveSelectors()
+        this.addListeners()
+
         this.dictionary     = dictionary     // JSONP variable loaded via script tag
         this.dictionaryKeys = Object.keys(this.dictionary)
-        this.suggestionEls  = document.getElementsByClassName('suggestion-field')
-        this.composition    = document.getElementById('composition-field')
-        this.input          = document.getElementById('initial-input')
         this.defaultText    = this.composition.innerText
         this.firstWord      = true
 
-        this.addListeners()
         console.log(dictionary)
+    }
+
+    saveSelectors() {
+        this.suggestionEls = document.getElementsByClassName('suggestion-field')
+        this.composition   = document.getElementById('composition-field')
+        this.input         = document.getElementById('initial-input')
+        this.restartBtn    = document.getElementById('restart-btn')
+        this.backBtn       = document.getElementById('back-btn')
+        // this.refreshBtn    = document.getElementById('refresh-btn')
     }
 
     addListeners() {
         this.activeListener()
         this.inactiveListener()
         this.typingListener()
-        this.selectionListener()
         this.backspaceListener()
+        this.selectionListener()
+        this.buttonListeners()
     }
+
+/* LISTENERS /------- */
 
     activeListener() {
         this.input.addEventListener('click', () => this.clearDefaultText())
     }
-    
+
     inactiveListener() {
         window.addEventListener('click', (e) => this.replaceDefaultText(e))
     }
 
     typingListener() {
-        this.input.addEventListener('input', (e) => this.beginComposition(e))
-    }
-
-    selectionListener() {
-        Array.from(this.suggestionEls).forEach((el) => {
-            el.addEventListener('click', (e) => this.updateComposition(e))
-        })
+        this.input.addEventListener('input', (e) => this.readInput(e))
     }
 
     backspaceListener() {
         window.addEventListener('keyup', (e) => {
-            if (!this.firstWord && e.keyCode === 8) {
+            if (e.keyCode === 8 && !this.firstWord) {
                 this.deleteLastWord()
             }
         })
     }
 
-    clearDefaultText() {
-        if (this.input.value == '') {
-            this.composition.innerText = ''
-        }
+    selectionListener() {
+        [...this.suggestionEls].forEach((el) => {
+            el.addEventListener('click', (e) => this.updateComposition(e))
+        })
     }
 
-    replaceDefaultText(e) {
-        if (e.target.id !== 'initial-input' && this.input.value == '') {
-            this.composition.innerText = this.defaultText
-        }
+    buttonListeners() {
+        this.restartBtn.addEventListener('click', () => this.restartComposition())
+        this.backBtn.addEventListener('click', () => this.deleteLastWord())
+        // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
     }
 
-    beginComposition(e) {
-        let word 
-        
+/* INPUT /------- */
+
+    readInput(e) {
+        let word
+
         word = e.target.value
         word = word.split(' ')[0]
         word = word.trim().toLowerCase()
 
         this.composition.innerText = word
+
         this.getSuggestions(word)
+
+        const buttonsDisabled = !word.length
+        this.toggleButtonsState(buttonsDisabled)
     }
+
+    disableInput() {
+        this.input.disabled = true
+        this.firstWord = false
+    }
+
+    enableInput() {
+        this.input.disabled = false
+        this.input.value = ''
+        this.input.focus()
+
+        this.firstWord = true
+    }
+
+/* COMPOSITION /------- */
+
+    updateComposition(e) {
+        const word = e.target.innerText
+
+        if (word) {
+            this.addNextWord(word)
+            this.getSuggestions(word)
+
+            if (this.firstWord) {
+                this.disableInput()
+            }
+        }
+    }
+
+    addNextWord(word) {
+        this.composition.innerText += ' ' + word
+    }
+
+    deleteLastWord() {
+        const words = this.composition.innerText.split(' ')
+
+        words.pop()
+
+        if (words.length) {
+            this.composition.innerText = words.join(' ')
+            this.refreshSuggestions()
+        } else {
+            this.restartComposition()
+        }
+    }
+
+    getLastWord() {
+        const words = this.composition.innerText.split(' ')
+        const lastIdx = words.length - 1
+
+        return words[lastIdx]
+    }
+
+    restartComposition() {
+        this.composition.innerText = ''
+
+        this.enableInput()
+        this.clearSuggestions()
+        this.toggleButtonsState(true)
+    }
+
+/* SUGGESTIONS /------- */
 
     getSuggestions(word) {
         const possibilities = this.dictionary[word]
@@ -99,45 +172,39 @@ class App {
         }
     }
 
-    updateComposition(e) {
-        const word = e.target.innerText
+    refreshSuggestions() {
+        const lastWord = this.getLastWord()
+        this.getSuggestions(lastWord)
+    }
 
-        if (word) {
-            this.addToComposition(word)
-            this.getSuggestions(word)
+    clearSuggestions() {
+        [...this.suggestionEls].forEach((suggestion) => {
+            suggestion.innerText = ''
+        })
+    }
 
-            if (this.firstWord) this.disableInput()
+/* UI STATES /------- */
+
+    toggleButtonsState(disabledState) {
+        // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
+        [this.restartBtn, this.backBtn].forEach((btn) => {
+            disabledState ? btn.classList.add('disabled') : btn.classList.remove('disabled')
+        })
+    }
+
+    clearDefaultText() {
+        if (this.input.value == '') {
+            this.composition.innerText = ''
         }
     }
 
-    addToComposition(word) {
-        this.composition.innerText += ' ' + word
+    replaceDefaultText(e) {
+        if (e.target.id !== 'initial-input' && this.input.value == '') {
+            this.composition.innerText = this.defaultText
+        }
     }
 
-    disableInput() {
-        this.input.disabled = true
-        this.firstWord = false
-    }
-
-    deleteLastWord() {
-        const currentComposition = this.composition.innerText
-        const words = currentComposition.split(' ')
-
-        words.pop()
-
-        this.composition.innerText = words.join(' ')
-        this.getSuggestions(words.slice(-1))
-
-        if (!words.length) this.restartComposition()
-    }
-
-    restartComposition() {
-        this.input.disabled = false
-        this.input.value = ''
-        this.input.focus()
-
-        this.firstWord = true
-    }
+/* UTILS /------- */
 
     makeUnique(array) {
         return [...new Set(array)]

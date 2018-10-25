@@ -3,3 +3,6 @@ node_modules/
 .sass-cache
 
 data/anna_fractuous-source_texts.txt
+
+server.csr
+server.key

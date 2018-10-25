@@ -63,6 +63,35 @@ body {
   .suggestion-field:not(:empty):first-child {
     border-left: 1px solid gray; }
 
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px; }
+
+.button {
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: none;
+  background-size: 110%;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer; }
+  .button.restart {
+    background-image: url(../assets/restart-key.png);
+    left: 1px; }
+  .button.refresh {
+    background-image: url(../assets/refresh-key.png); }
+  .button.back {
+    background-image: url(../assets/backspace-key.png); }
+  .button.disabled {
+    opacity: .5; }
+  @media (min-width: 550px) {
+    .button {
+      height: 35px;
+      width: 35px; } }
+
 /* Animation */
 @-webkit-keyframes blink {
   0% {
