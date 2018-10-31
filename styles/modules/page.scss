@@ -8,7 +8,11 @@ body {
 }
 
 .header {
-    margin: 15px 0 50px 0;
+    margin: 50px 0;
+
+    @media (min-width: 768px) {
+        margin: 15px 0 50px 0;
+    }
 }
 
 .header-text {
@@ -25,11 +29,12 @@ body {
 
 .page {
     position: absolute;
-    width: 77.88%;          // 100% - (2 * 11.11% padding)
+    width: 90%;             // 100% - (2 * 5% padding)
     left: -100vw;
 
+    &.slide-in,
     &.active-page {
-        left: 11.11%;
+        left: 5%;
     }
 
     &.active-page.slide-out {
@@ -38,7 +43,19 @@ body {
     }
     
     &.slide-in {
-        left: 11.11%;
         transition: left ease 300ms;
+    }
+
+    @media (min-width: 768px) {
+        width: 77.88%;      // 100% - (2 * 11.11% padding)
+
+        &.active-page,
+        &.slide-in {
+            left: 11.11%;
+        }
+
+        &.active-page.slide-out {
+            left: 100vw;
+        }
     }
 }

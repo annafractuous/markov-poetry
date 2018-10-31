@@ -7,7 +7,10 @@ body {
       padding: 11.11%; } }
 
 .header {
-  margin: 15px 0 50px 0; }
+  margin: 50px 0; }
+  @media (min-width: 768px) {
+    .header {
+      margin: 15px 0 50px 0; } }
 
 .header-text {
   font-weight: bold;
@@ -21,16 +24,22 @@ body {
 
 .page {
   position: absolute;
-  width: 77.88%;
+  width: 90%;
   left: -100vw; }
-  .page.active-page {
-    left: 11.11%; }
+  .page.slide-in, .page.active-page {
+    left: 5%; }
   .page.active-page.slide-out {
     left: 100vw;
     transition: left ease 300ms; }
   .page.slide-in {
-    left: 11.11%;
     transition: left ease 300ms; }
+  @media (min-width: 768px) {
+    .page {
+      width: 77.88%; }
+      .page.active-page, .page.slide-in {
+        left: 11.11%; }
+      .page.active-page.slide-out {
+        left: 100vw; } }
 
 .navigation {
   position: absolute;
