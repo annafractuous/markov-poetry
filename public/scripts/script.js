@@ -7,6 +7,7 @@ class App {
         this.dictionaryKeys = Object.keys(this.dictionary)
         this.defaultText    = this.composition.innerText
         this.firstWord      = true
+        this.museumLoaded   = false
 
         console.log(dictionary)
     }
@@ -14,12 +15,12 @@ class App {
     saveSelectors() {
         this.activePage    = document.querySelector('.active-page')
         this.activeNav     = document.querySelector('.active-nav-item')
-        this.museumEntries = document.getElementsByClassName('musem-entries')
         this.suggestionEls = document.getElementsByClassName('suggestion-field')
         this.composition   = document.getElementById('composition-field')
         this.input         = document.getElementById('initial-input')
         this.restartBtn    = document.getElementById('restart-btn')
         this.backBtn       = document.getElementById('back-btn')
+        this.museumEntries = document.getElementById('musem-entries')
         // this.refreshBtn    = document.getElementById('refresh-btn')
     }
 
@@ -81,6 +82,8 @@ class App {
         const nextPage = document.getElementById(pageSelection)
 
         if (nextPage !== this.activePage) {
+            if (!this.museumLoaded && nextPage.id === 'museum-page') this.loadMuseum()
+            
             this.navigate(nextPage)
             this.updateActiveNav(pageSelection)
         }
@@ -96,7 +99,7 @@ class App {
             nextPage.classList.add('active-page')
             nextPage.classList.remove('slide-in')
             
-            this.activePage = nextPage;
+            this.activePage = nextPage
         }, 300)     // 300ms = sliding transition speed
     }
 
@@ -106,7 +109,7 @@ class App {
         this.activeNav.classList.remove('active-nav-item')
         nextNav.classList.add('active-nav-item')
 
-        this.activeNav = nextNav;
+        this.activeNav = nextNav
     }
 
 /* INPUT /------- */
@@ -234,6 +237,8 @@ class App {
     loadMuseum() {
         this.initializeFirebase()
         this.fetchPoems()
+
+        this.museumLoaded = true
     }
     
     initializeFirebase() {
@@ -246,10 +251,10 @@ class App {
         // // 1. paginate or lazy-load the museum, loading 20 at a time
         // // 2. save the first 20 to localStorage
         this.poemsDB.limitToLast(20).on('value', (snapshot) => {
-            this.displayPoems(snapshot.val());
+            this.displayPoems(snapshot.val())
         }, (errorObject) => {
-            console.log('The read failed: ', errorObject);
-        });
+            console.log('The read failed: ', errorObject)
+        })
     }
 
     displayPoems(poems) {
@@ -312,5 +317,5 @@ class App {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    MuseMachina = new App();
-});
+    MuseMachina = new App()
+})
