@@ -1,24 +1,235 @@
 class App {
     constructor() {
+        this.saveSelectors()
+        this.addListeners()
+
         this.dictionary     = dictionary     // JSONP variable loaded via script tag
         this.dictionaryKeys = Object.keys(this.dictionary)
+        this.defaultText    = this.composition.innerText
         this.firstWord      = true
 
-        this.saveElements()
-        this.addListeners()
-        this.loadMuseum()
-        
         console.log(dictionary)
     }
 
-    saveElements() {
+    saveSelectors() {
         this.activePage    = document.querySelector('.active-page')
         this.activeNav     = document.querySelector('.active-nav-item')
-        this.museumEntries = document.querySelector('.musem-entries')
-        this.suggestionEls = document.querySelectorAll('.suggestion-field')
-        this.composition   = document.querySelector('#composition-field')
-        this.input         = document.querySelector('#initial-input')
+        this.museumEntries = document.getElementsByClassName('musem-entries')
+        this.suggestionEls = document.getElementsByClassName('suggestion-field')
+        this.composition   = document.getElementById('composition-field')
+        this.input         = document.getElementById('initial-input')
+        this.restartBtn    = document.getElementById('restart-btn')
+        this.backBtn       = document.getElementById('back-btn')
+        // this.refreshBtn    = document.getElementById('refresh-btn')
     }
+
+    addListeners() {
+        this.navListener()
+        this.activeListener()
+        this.inactiveListener()
+        this.typingListener()
+        this.backspaceListener()
+        this.selectionListener()
+        this.buttonListeners()
+    }
+
+/* LISTENERS /------- */
+
+    navListener() {
+        const navItems = document.querySelectorAll('.nav-list-item')
+        navItems.forEach((el) => {
+            el.addEventListener('click', (e) => this.clickNavItem(e))
+        })
+    }
+
+    activeListener() {
+        this.input.addEventListener('click', () => this.clearDefaultText())
+    }
+
+    inactiveListener() {
+        window.addEventListener('click', (e) => this.replaceDefaultText(e))
+    }
+
+    typingListener() {
+        this.input.addEventListener('input', (e) => this.readInput(e))
+    }
+
+    backspaceListener() {
+        window.addEventListener('keyup', (e) => {
+            if (e.keyCode === 8 && !this.firstWord) {
+                this.deleteLastWord()
+            }
+        })
+    }
+
+    selectionListener() {
+        [...this.suggestionEls].forEach((el) => {
+            el.addEventListener('click', (e) => this.updateComposition(e))
+        })
+    }
+
+    buttonListeners() {
+        this.restartBtn.addEventListener('click', () => this.restartComposition())
+        this.backBtn.addEventListener('click', () => this.deleteLastWord())
+        // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
+    }
+
+/* NAVIGATION /------- */
+
+    clickNavItem(e) {
+        const pageSelection = e.currentTarget.dataset.page
+        const nextPage = document.getElementById(pageSelection)
+
+        if (nextPage !== this.activePage) {
+            this.navigate(nextPage)
+            this.updateActiveNav(pageSelection)
+        }
+    }
+
+    navigate(nextPage) {
+        this.activePage.classList.add('slide-out')
+        nextPage.classList.add('slide-in')
+
+        setTimeout(() => {
+            this.activePage.classList.remove('active-page')
+            this.activePage.classList.remove('slide-out')
+            nextPage.classList.add('active-page')
+            nextPage.classList.remove('slide-in')
+            
+            this.activePage = nextPage;
+        }, 300)     // 300ms = sliding transition speed
+    }
+
+    updateActiveNav(pageSelection) {
+        const nextNav = document.querySelector('[data-page=' + pageSelection)
+        
+        this.activeNav.classList.remove('active-nav-item')
+        nextNav.classList.add('active-nav-item')
+
+        this.activeNav = nextNav;
+    }
+
+/* INPUT /------- */
+
+    readInput(e) {
+        let word
+
+        word = e.target.value
+        word = word.split(' ')[0]
+        word = word.trim().toLowerCase()
+
+        this.composition.innerText = word
+
+        this.getSuggestions(word)
+
+        const buttonsDisabled = !word.length
+        this.toggleButtonsState(buttonsDisabled)
+    }
+
+    disableInput() {
+        this.input.disabled = true
+        this.firstWord = false
+    }
+
+    enableInput() {
+        this.input.disabled = false
+        this.input.value = ''
+        this.input.focus()
+
+        this.firstWord = true
+    }
+
+/* COMPOSITION /------- */
+
+    updateComposition(e) {
+        const word = e.target.innerText
+
+        if (word) {
+            this.addNextWord(word)
+            this.getSuggestions(word)
+
+            if (this.firstWord) {
+                this.disableInput()
+            }
+        }
+    }
+
+    addNextWord(word) {
+        this.composition.innerText += ' ' + word
+    }
+
+    deleteLastWord() {
+        const words = this.composition.innerText.split(' ')
+
+        words.pop()
+
+        if (words.length) {
+            this.composition.innerText = words.join(' ')
+            this.refreshSuggestions()
+        } else {
+            this.restartComposition()
+        }
+    }
+
+    getLastWord() {
+        const words = this.composition.innerText.split(' ')
+        const lastIdx = words.length - 1
+
+        return words[lastIdx]
+    }
+
+    restartComposition() {
+        this.composition.innerText = ''
+
+        this.enableInput()
+        this.clearSuggestions()
+        this.toggleButtonsState(true)
+    }
+
+/* SUGGESTIONS /------- */
+
+    getSuggestions(word) {
+        const possibilities = this.dictionary[word]
+        let suggestions = []
+
+        if (possibilities) {
+            const uniquePossibilities = this.makeUnique(possibilities)
+
+            if (uniquePossibilities.length <= 3) {
+                suggestions = uniquePossibilities
+            } else {
+                while (suggestions.length < 3) {
+                    let suggestion = this.getRandomEl(possibilities)
+                    if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
+                }
+            }
+        }
+
+        this.returnSuggestions(suggestions)
+    }
+
+    returnSuggestions(suggestions) {
+        for (let i = 0, l = 3; i < l; i++) {
+            if (suggestions[i]) {
+                this.suggestionEls[i].innerText = suggestions[i]
+            } else {
+                this.suggestionEls[i].innerText = ''
+            }
+        }
+    }
+
+    refreshSuggestions() {
+        const lastWord = this.getLastWord()
+        this.getSuggestions(lastWord)
+    }
+
+    clearSuggestions() {
+        [...this.suggestionEls].forEach((suggestion) => {
+            suggestion.innerText = ''
+        })
+    }
+
+/* MUSEUM /------- */
 
     loadMuseum() {
         this.initializeFirebase()
@@ -68,144 +279,28 @@ class App {
         this.poemsDB.update(data)
     }
 
-    addListeners() {
-        this.navListener()
-        this.typingListener()
-        this.selectionListener()
-        this.backspaceListener()
-    }
+/* UI STATES /------- */
 
-    navListener() {
-        const navItems = document.querySelectorAll('.nav-list-item')
-        navItems.forEach((el) => {
-            el.addEventListener('click', (e) => this.clickNavItem(e))
+    toggleButtonsState(disabledState) {
+        // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
+        [this.restartBtn, this.backBtn].forEach((btn) => {
+            disabledState ? btn.classList.add('disabled') : btn.classList.remove('disabled')
         })
     }
 
-    typingListener() {
-        this.input.addEventListener('input', (e) => this.beginComposition(e))
-    }
-
-    selectionListener() {
-        this.suggestionEls.forEach((el) => {
-            el.addEventListener('click', (e) => this.updateComposition(e))
-        })
-    }
-
-    backspaceListener() {
-        window.addEventListener('keyup', (e) => {
-            if (!this.firstWord && e.keyCode === 8) {
-                this.deleteLastWord()
-            }
-        })
-    }
-
-    clickNavItem(e) {
-        const pageSelection = e.currentTarget.dataset.page
-        const nextPage = document.getElementById(pageSelection)
-
-        if (nextPage !== this.activePage) {
-            this.navigate(nextPage)
-            this.updateActiveNav(pageSelection)
+    clearDefaultText() {
+        if (this.input.value == '') {
+            this.composition.innerText = ''
         }
     }
 
-    navigate(nextPage) {
-        this.activePage.classList.add('slide-out')
-        nextPage.classList.add('slide-in')
-
-        setTimeout(() => {
-            this.activePage.classList.remove('active-page')
-            this.activePage.classList.remove('slide-out')
-            nextPage.classList.add('active-page')
-            nextPage.classList.remove('slide-in')
-            
-            this.activePage = nextPage;
-        }, 300)     // 300ms = sliding transition speed
-    }
-
-    updateActiveNav(pageSelection) {
-        const nextNav = document.querySelector('[data-page=' + pageSelection)
-        this.activeNav.classList.remove('active-nav-item')
-        nextNav.classList.add('active-nav-item')
-    }
-
-    beginComposition(e) {
-        const word = e.target.value.trim().toLowerCase()
-
-        this.composition.innerText = word
-        this.getSuggestions(word)
-    }
-
-    getSuggestions(word) {
-        const possibilities = this.dictionary[word]
-        let suggestions = []
-
-        if (possibilities) {
-            const uniquePossibilities = this.makeUnique(possibilities)
-
-            if (uniquePossibilities.length <= 3) {
-                suggestions = uniquePossibilities
-            } else {
-                while (suggestions.length < 3) {
-                    let suggestion = this.getRandomEl(possibilities)
-                    if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
-                }
-            }
-        }
-
-        this.returnSuggestions(suggestions)
-    }
-
-    returnSuggestions(suggestions) {
-        for (let i = 0, l = 3; i < l; i++) {
-            if (suggestions[i]) {
-                this.suggestionEls[i].innerText = suggestions[i]
-            } else {
-                this.suggestionEls[i].innerText = ''
-            }
+    replaceDefaultText(e) {
+        if (e.target.id !== 'initial-input' && this.input.value == '') {
+            this.composition.innerText = this.defaultText
         }
     }
 
-    updateComposition(e) {
-        const word = e.target.innerText
-
-        if (word) {
-            this.addToComposition(word)
-            this.getSuggestions(word)
-
-            if (this.firstWord) this.disableInput()
-        }
-    }
-
-    addToComposition(word) {
-        this.composition.innerText += ' ' + word
-    }
-
-    disableInput() {
-        this.input.disabled = true
-        this.firstWord = false
-    }
-
-    deleteLastWord() {
-        const currentComposition = this.composition.innerText
-        const words = currentComposition.split(' ')
-
-        words.pop()
-
-        this.composition.innerText = words.join(' ')
-        this.getSuggestions(words.slice(-1))
-
-        if (!words.length) this.restartComposition()
-    }
-
-    restartComposition() {
-        this.input.disabled = false
-        this.input.value = ''
-        this.input.focus()
-
-        this.firstWord = true
-    }
+/* UTILS /------- */
 
     makeUnique(array) {
         return [...new Set(array)]

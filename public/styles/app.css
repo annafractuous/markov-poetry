@@ -1,13 +1,10 @@
 @charset "UTF-8";
 body {
-  font-family: 'Cutive Mono', monospace;
-  padding: 11.11%;
-  margin: 0;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  position: relative;
-  box-sizing: border-box; }
+  font-family: 'Cutive Mono',monospace;
+  padding: 5%; }
+  @media (min-width: 768px) {
+    body {
+      padding: 11.11%; } }
 
 .header {
   margin: 15px 0 50px 0; }
@@ -101,10 +98,44 @@ body {
   font-size: 14px;
   color: gray;
   cursor: pointer; }
-  .suggestion-field:not(:empty) {
-    border-right: 1px solid gray; }
-    .suggestion-field:not(:empty):first-child {
-      border-left: 1px solid gray; }
+
+.suggestion-field:not(:empty) {
+  border-right: 1px solid gray; }
+  .suggestion-field:not(:empty):first-child {
+    border-left: 1px solid gray; }
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px; }
+
+.button {
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: none;
+  background-size: 110%;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer; }
+  .button.restart {
+    background-image: url(../assets/restart-key.png);
+    left: 1px; }
+  .button.refresh {
+    background-image: url(../assets/refresh-key.png); }
+  .button.back {
+    background-image: url(../assets/backspace-key.png); }
+  .button.disabled {
+    opacity: .5; }
+  @media (min-width: 550px) {
+    .button {
+      height: 35px;
+      width: 35px; } }
+
+.sr-only {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px); }
 
 /* Cursor Animation */
 @-webkit-keyframes blink {
