@@ -108,6 +108,8 @@ body {
   font-size: 14px;
   color: gray;
   cursor: pointer; }
+  .suggestion-field:empty {
+    pointer-events: none; }
 
 .suggestion-field:not(:empty) {
   border-right: 1px solid gray; }
@@ -178,7 +180,12 @@ body {
 
 .save-poem-dialogue,
 .save-poem-overlay {
-  display: none; }
+  opacity: 0;
+  pointer-events: none; }
+  .dialogue-open .save-poem-dialogue, .dialogue-open
+  .save-poem-overlay {
+    pointer-events: all;
+    transition: opacity 300ms ease-in; }
 
 .save-poem-overlay {
   position: absolute;
@@ -187,22 +194,26 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: white;
-  opacity: .7;
   z-index: 1; }
   .dialogue-open .save-poem-overlay {
-    display: block; }
+    opacity: .7; }
 
 .save-poem-dialogue {
+  display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
   position: relative;
   width: 80vw;
   height: 50vw;
+  max-height: 200px;
+  max-width: 400px;
+  margin: 0 auto;
   padding: 10px;
   border-radius: 5px;
   background-color: lightgray;
   z-index: 10; }
   .dialogue-open .save-poem-dialogue {
-    display: flex; }
+    opacity: 1; }
 
 .dialogue-text {
   text-align: center; }
@@ -210,11 +221,14 @@ body {
 .dialogue-input {
   font-family: 'Cutive Mono', monospace;
   font-size: 16px;
-  padding: 5px 10px; }
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 5px 10px;
+  border: none; }
   .dialogue-input:focus {
     outline-color: darkgray; }
 
-.dialogue-btn {
+.final-save-btn {
   font-family: 'Cutive Mono', monospace;
   text-transform: uppercase;
   width: 120px;

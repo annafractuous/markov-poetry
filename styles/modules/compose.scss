@@ -47,6 +47,10 @@
     font-size: 14px;
     color: gray;
     cursor: pointer;
+
+    &:empty {
+        pointer-events: none;
+    }
 }
 
 .suggestion-field:not(:empty) {

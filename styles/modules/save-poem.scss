@@ -1,6 +1,12 @@
 .save-poem-dialogue, 
 .save-poem-overlay {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
+
+    .dialogue-open & {
+        pointer-events: all;
+        transition: opacity 300ms ease-in;
+    }
 }
 
 .save-poem-overlay {
@@ -10,26 +16,30 @@
     width: 100vw;
     height: 100vh;
     background-color: white;
-    opacity: .7;
     z-index: 1;
 
     .dialogue-open & {
-        display: block;
+        opacity: .7;
     }
 }
 
 .save-poem-dialogue {
+    display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     position: relative;
     width: 80vw;
     height: 50vw;
+    max-height: 200px;
+    max-width: 400px;
+    margin: 0 auto;
     padding: 10px;
     border-radius: 5px;
     background-color: lightgray;
     z-index: 10;
 
     .dialogue-open & {
-        display: flex;
+        opacity: 1;
     }
 }
 
@@ -40,14 +50,17 @@
 .dialogue-input {
     font-family: 'Cutive Mono', monospace;
     font-size: 16px;
+    max-width: 300px;
+    margin: 0 auto;
     padding: 5px 10px;
+    border: none;
 
     &:focus {
         outline-color: darkgray;
     }
 }
 
-.dialogue-btn {
+.final-save-btn {
     font-family: 'Cutive Mono', monospace;
     text-transform: uppercase;
     width: 120px;

@@ -7,6 +7,7 @@ class App {
         this.dictionaryKeys = Object.keys(this.dictionary)
         this.defaultText    = this.composition.innerText
         this.firstWord      = true
+        this.dbInitialized  = false
         this.museumLoaded   = false
 
         console.log(dictionary)
@@ -21,12 +22,13 @@ class App {
         this.restartBtn    = document.getElementById('restart-btn')
         this.backBtn       = document.getElementById('back-btn')
         this.saveBtn       = document.getElementById('save-btn')
-        this.dialogueBtn   = document.getElementById('dialogue-btn')
+        this.finalSaveBtn  = document.getElementById('final-save-btn')
         this.museumEntries = document.getElementById('musem-entries')
         // this.refreshBtn    = document.getElementById('refresh-btn')
     }
 
     addListeners() {
+        this.overlayListener()
         this.navListener()
         this.activeListener()
         this.inactiveListener()
@@ -37,6 +39,11 @@ class App {
     }
 
 /* LISTENERS /------- */
+
+    overlayListener() {
+        const overlay = document.querySelector('.save-poem-overlay')
+        overlay.addEventListener('click', () => this.toggleSaveDialogue(false))
+    }
 
     navListener() {
         const navItems = document.querySelectorAll('.nav-list-item')
@@ -74,8 +81,8 @@ class App {
     buttonListeners() {
         this.restartBtn.addEventListener('click', () => this.restartComposition())
         this.backBtn.addEventListener('click', () => this.deleteLastWord())
-        this.saveBtn.addEventListener('click', () => this.savePoemPrompt())
-        this.dialogueBtn.addEventListener('click', () => this.addPenname())
+        this.saveBtn.addEventListener('click', () => this.toggleSaveDialogue(true))
+        this.finalSaveBtn.addEventListener('click', () => this.savePoem())
         // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
     }
 
@@ -239,7 +246,7 @@ class App {
 /* MUSEUM /------- */
 
     loadMuseum() {
-        this.initializeFirebase()
+        if (!this.dbInitialized) this.initializeFirebase()
         this.fetchPoems()
 
         this.museumLoaded = true
@@ -248,6 +255,8 @@ class App {
     initializeFirebase() {
         this.db = firebase.database()
         this.poemsDB = this.db.ref('poems')
+
+        this.dbInitialized = true
     }
 
     fetchPoems() {
@@ -276,19 +285,17 @@ class App {
         this.museumEntries.innerHTML += html
     }
 
-    savePoemPrompt() {
-        document.body.classList.add('dialogue-open')
-    }
-
-    addPenname() {
+    savePoem() {
         const poem = this.composition.innerText
         const penname = document.getElementById('penname').value
         
-        this.savePoem(poem, penname)
-        document.body.classList.remove('dialogue-open')
+        if (!this.dbInitialized) this.initializeFirebase()
+        this.savePoemToDB(poem, penname)
+
+        this.toggleSaveDialogue(false)
     }
 
-    savePoem(poem, user) {
+    savePoemToDB(poem, user) {
         const key = this.poemsDB.push().key
         const data = {}
 
@@ -301,6 +308,11 @@ class App {
     }
 
 /* UI STATES /------- */
+
+    toggleSaveDialogue(open) {
+        const body = document.body
+        open ? body.classList.add('dialogue-open') : body.classList.remove('dialogue-open')
+    }
 
     toggleButtonsState(disabledState) {
         // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
