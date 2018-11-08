@@ -20,6 +20,8 @@ class App {
         this.input         = document.getElementById('initial-input')
         this.restartBtn    = document.getElementById('restart-btn')
         this.backBtn       = document.getElementById('back-btn')
+        this.saveBtn       = document.getElementById('save-btn')
+        this.dialogueBtn   = document.getElementById('dialogue-btn')
         this.museumEntries = document.getElementById('musem-entries')
         // this.refreshBtn    = document.getElementById('refresh-btn')
     }
@@ -72,6 +74,8 @@ class App {
     buttonListeners() {
         this.restartBtn.addEventListener('click', () => this.restartComposition())
         this.backBtn.addEventListener('click', () => this.deleteLastWord())
+        this.saveBtn.addEventListener('click', () => this.savePoemPrompt())
+        this.dialogueBtn.addEventListener('click', () => this.addPenname())
         // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
     }
 
@@ -272,6 +276,18 @@ class App {
         this.museumEntries.innerHTML += html
     }
 
+    savePoemPrompt() {
+        document.body.classList.add('dialogue-open')
+    }
+
+    addPenname() {
+        const poem = this.composition.innerText
+        const penname = document.getElementById('penname').value
+        
+        this.savePoem(poem, penname)
+        document.body.classList.remove('dialogue-open')
+    }
+
     savePoem(poem, user) {
         const key = this.poemsDB.push().key
         const data = {}
@@ -288,7 +304,7 @@ class App {
 
     toggleButtonsState(disabledState) {
         // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
-        [this.restartBtn, this.backBtn].forEach((btn) => {
+        [this.restartBtn, this.backBtn, this.saveBtn].forEach((btn) => {
             disabledState ? btn.classList.add('disabled') : btn.classList.remove('disabled')
         })
     }

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-  font-family: 'Cutive Mono',monospace;
+  font-family: 'Cutive Mono', monospace;
   padding: 5%; }
   @media (min-width: 768px) {
     body {
@@ -132,10 +132,10 @@ body {
   .button.restart {
     background-image: url(../assets/restart-key.png);
     left: 1px; }
-  .button.refresh {
-    background-image: url(../assets/refresh-key.png); }
   .button.back {
     background-image: url(../assets/backspace-key.png); }
+  .button.save {
+    background-image: url(../assets/save-key.png); }
   .button.disabled {
     opacity: .5; }
   @media (min-width: 550px) {
@@ -175,3 +175,51 @@ body {
   text-align: right; }
   .poem-composer::before, .poem-composer::after {
     content: '—'; }
+
+.save-poem-dialogue,
+.save-poem-overlay {
+  display: none; }
+
+.save-poem-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  opacity: .7;
+  z-index: 1; }
+  .dialogue-open .save-poem-overlay {
+    display: block; }
+
+.save-poem-dialogue {
+  flex-direction: column;
+  position: relative;
+  width: 80vw;
+  height: 50vw;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: lightgray;
+  z-index: 10; }
+  .dialogue-open .save-poem-dialogue {
+    display: flex; }
+
+.dialogue-text {
+  text-align: center; }
+
+.dialogue-input {
+  font-family: 'Cutive Mono', monospace;
+  font-size: 16px;
+  padding: 5px 10px; }
+  .dialogue-input:focus {
+    outline-color: darkgray; }
+
+.dialogue-btn {
+  font-family: 'Cutive Mono', monospace;
+  text-transform: uppercase;
+  width: 120px;
+  height: 30px;
+  margin: 20px auto 0;
+  background-color: darkgray;
+  color: white;
+  cursor: pointer; }

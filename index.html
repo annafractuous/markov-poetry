@@ -50,6 +50,9 @@
             <button id="back-btn" class="button back disabled" title="delete previous word">
                 <span class="sr-only">delete previous word</span>
             </button>
+            <button id="save-btn" class="button save disabled" title="save to museum">
+                <span class="sr-only">save to museum</span>
+            </button>
         </section>
         
         <!-- <button id="generate-btn">Compose</button> -->
@@ -62,6 +65,16 @@
         <section id="musem-entries" class="musem-entries"></section>
     </article>
     <!-- / MUSEUM PAGE -->
+    
+    
+    <!-- SAVE POEM DIALOGUE -->
+    <div class="save-poem-overlay"></div>
+    <section class="save-poem-dialogue">
+        <p class="dialogue-text">What's your pen name?</p>
+        <input id="penname" class="dialogue-input">
+        <button id="dialogue-btn" class="dialogue-btn">Save</button>
+    </section>
+    <!-- / SAVE POEM DIALOGUE -->
 
 
     <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-app.js"></script>

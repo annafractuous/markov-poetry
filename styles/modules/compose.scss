@@ -79,12 +79,16 @@
         left: 1px;
     }
 
-    &.refresh {
-        background-image: url(../assets/refresh-key.png);
-    }
+    // &.refresh {
+    //     background-image: url(../assets/refresh-key.png);
+    // }
 
     &.back {
         background-image: url(../assets/backspace-key.png);
+    }
+
+    &.save {
+        background-image: url(../assets/save-key.png);
     }
 
     &.disabled {
