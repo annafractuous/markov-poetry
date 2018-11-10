@@ -7,20 +7,29 @@ class App {
         this.dictionaryKeys = Object.keys(this.dictionary)
         this.defaultText    = this.composition.innerText
         this.firstWord      = true
+        this.dbInitialized  = false
+        this.museumLoaded   = false
 
         console.log(dictionary)
     }
 
     saveSelectors() {
+        this.activePage    = document.querySelector('.active-page')
+        this.activeNav     = document.querySelector('.active-nav-item')
         this.suggestionEls = document.getElementsByClassName('suggestion-field')
         this.composition   = document.getElementById('composition-field')
         this.input         = document.getElementById('initial-input')
         this.restartBtn    = document.getElementById('restart-btn')
         this.backBtn       = document.getElementById('back-btn')
+        this.saveBtn       = document.getElementById('save-btn')
+        this.finalSaveBtn  = document.getElementById('final-save-btn')
+        this.museumEntries = document.getElementById('musem-entries')
         // this.refreshBtn    = document.getElementById('refresh-btn')
     }
 
     addListeners() {
+        this.overlayListener()
+        this.navListener()
         this.activeListener()
         this.inactiveListener()
         this.typingListener()
@@ -30,6 +39,18 @@ class App {
     }
 
 /* LISTENERS /------- */
+
+    overlayListener() {
+        const overlay = document.querySelector('.save-poem-overlay')
+        overlay.addEventListener('click', () => this.toggleSaveDialogue(false))
+    }
+
+    navListener() {
+        const navItems = document.querySelectorAll('.nav-list-item')
+        navItems.forEach((el) => {
+            el.addEventListener('click', (e) => this.clickNavItem(e))
+        })
+    }
 
     activeListener() {
         this.input.addEventListener('click', () => this.clearDefaultText())
@@ -60,7 +81,46 @@ class App {
     buttonListeners() {
         this.restartBtn.addEventListener('click', () => this.restartComposition())
         this.backBtn.addEventListener('click', () => this.deleteLastWord())
+        this.saveBtn.addEventListener('click', () => this.toggleSaveDialogue(true))
+        this.finalSaveBtn.addEventListener('click', () => this.savePoem())
         // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
+    }
+
+/* NAVIGATION /------- */
+
+    clickNavItem(e) {
+        const pageSelection = e.currentTarget.dataset.page
+        const nextPage = document.getElementById(pageSelection)
+
+        if (nextPage !== this.activePage) {
+            if (!this.museumLoaded && nextPage.id === 'museum-page') this.loadMuseum()
+            
+            this.navigate(nextPage)
+            this.updateActiveNav(pageSelection)
+        }
+    }
+
+    navigate(nextPage) {
+        this.activePage.classList.add('slide-out')
+        nextPage.classList.add('slide-in')
+
+        setTimeout(() => {
+            this.activePage.classList.remove('active-page')
+            this.activePage.classList.remove('slide-out')
+            nextPage.classList.add('active-page')
+            nextPage.classList.remove('slide-in')
+            
+            this.activePage = nextPage
+        }, 300)     // 300ms = sliding transition speed
+    }
+
+    updateActiveNav(pageSelection) {
+        const nextNav = document.querySelector('[data-page=' + pageSelection)
+        
+        this.activeNav.classList.remove('active-nav-item')
+        nextNav.classList.add('active-nav-item')
+
+        this.activeNav = nextNav
     }
 
 /* INPUT /------- */
@@ -183,11 +243,80 @@ class App {
         })
     }
 
+/* MUSEUM /------- */
+
+    loadMuseum() {
+        if (!this.dbInitialized) this.initializeFirebase()
+        this.fetchPoems()
+
+        this.museumLoaded = true
+    }
+    
+    initializeFirebase() {
+        this.db = firebase.database()
+        this.poemsDB = this.db.ref('poems')
+
+        this.dbInitialized = true
+    }
+
+    fetchPoems() {
+        // TO DO: 
+        // // 1. paginate or lazy-load the museum, loading 20 at a time
+        // // 2. save the first 20 to localStorage
+        this.poemsDB.limitToLast(20).on('value', (snapshot) => {
+            this.displayPoems(snapshot.val())
+        }, (errorObject) => {
+            console.log('The read failed: ', errorObject)
+        })
+    }
+
+    displayPoems(poems) {
+        poems = Object.values(poems).reverse()
+        poems.forEach((poem) => this.displayPoem(poem))
+    }
+
+    displayPoem(poem) {
+        const html = `
+            <div class="museum-entry">
+                <p class="poem-text">${poem.poem}</p>
+                <p class="poem-composer">${poem.user}</p>
+            </div>
+        `
+        this.museumEntries.innerHTML += html
+    }
+
+    savePoem() {
+        const poem = this.composition.innerText
+        const penname = document.getElementById('penname').value
+        
+        if (!this.dbInitialized) this.initializeFirebase()
+        this.savePoemToDB(poem, penname)
+
+        this.toggleSaveDialogue(false)
+    }
+
+    savePoemToDB(poem, user) {
+        const key = this.poemsDB.push().key
+        const data = {}
+
+        data[key] = {
+            poem: poem,
+            user: user
+        }
+
+        this.poemsDB.update(data)
+    }
+
 /* UI STATES /------- */
+
+    toggleSaveDialogue(open) {
+        const body = document.body
+        open ? body.classList.add('dialogue-open') : body.classList.remove('dialogue-open')
+    }
 
     toggleButtonsState(disabledState) {
         // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
-        [this.restartBtn, this.backBtn].forEach((btn) => {
+        [this.restartBtn, this.backBtn, this.saveBtn].forEach((btn) => {
             disabledState ? btn.classList.add('disabled') : btn.classList.remove('disabled')
         })
     }
@@ -216,5 +345,5 @@ class App {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    MuseMachina = new App();
-});
+    MuseMachina = new App()
+})

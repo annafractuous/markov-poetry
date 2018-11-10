@@ -1,0 +1,61 @@
+body {
+    font-family: 'Cutive Mono', monospace;
+    padding: 5%;
+
+    @media (min-width: 768px) {
+        padding: 11.11%;
+    }
+}
+
+.header {
+    margin: 50px 0;
+
+    @media (min-width: 768px) {
+        margin: 15px 0 50px 0;
+    }
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 32px;
+    border-bottom: 1px solid black;
+    cursor: default;
+}
+
+.cursor {
+    font-weight: lighter;
+    color: darkgray;
+}
+
+.page {
+    position: absolute;
+    width: 90%;             // 100% - (2 * 5% padding)
+    left: -100vw;
+
+    &.slide-in,
+    &.active-page {
+        left: 5%;
+    }
+
+    &.active-page.slide-out {
+        left: 100vw;
+        transition: left ease 300ms;
+    }
+    
+    &.slide-in {
+        transition: left ease 300ms;
+    }
+
+    @media (min-width: 768px) {
+        width: 77.88%;      // 100% - (2 * 11.11% padding)
+
+        &.active-page,
+        &.slide-in {
+            left: 11.11%;
+        }
+
+        &.active-page.slide-out {
+            left: 100vw;
+        }
+    }
+}

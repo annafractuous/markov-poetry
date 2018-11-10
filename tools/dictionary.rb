@@ -41,7 +41,7 @@ class Dictionary
 
     def normalize_text(corpus)
         corpus.downcase!
-        corpus.gsub!(/[^\sa-z;.!?'"‘’“”]+/, '').gsub!(/\s{2,}/, ' ')
+        corpus.gsub!(/[^\sa-z;.!?'"‘’“”]+/, ' ').gsub!(/\s{2,}/, ' ')
     end
 
     def loop_through(words)
@@ -94,9 +94,9 @@ end
 ######
 
 Dictionary.new([
-    'annie_dillard-solar_eclipse.txt',
-    'annie_dillard-pilgrim_at_tinker_creek.txt',
     'anna_fractuous-source_texts.txt',
+    'annie_dillard-pilgrim_at_tinker_creek.txt',
+    'annie_dillard-solar_eclipse.txt',
     'italo_calvino-distance_of_the_moon.txt',
     'poems.txt'
 ])

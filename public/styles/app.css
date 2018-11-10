@@ -1,22 +1,69 @@
+@charset "UTF-8";
 body {
-  font-family: 'Cutive Mono',monospace;
+  font-family: 'Cutive Mono', monospace;
   padding: 5%; }
   @media (min-width: 768px) {
     body {
       padding: 11.11%; } }
 
-.header,
-.composition {
-  margin-bottom: 50px; }
+.header {
+  margin: 50px 0; }
+  @media (min-width: 768px) {
+    .header {
+      margin: 15px 0 50px 0; } }
 
 .header-text {
   font-weight: bold;
   font-size: 32px;
-  border-bottom: 1px solid black; }
+  border-bottom: 1px solid black;
+  cursor: default; }
 
 .cursor {
   font-weight: lighter;
   color: darkgray; }
+
+.page {
+  position: absolute;
+  width: 90%;
+  left: -100vw; }
+  .page.slide-in, .page.active-page {
+    left: 5%; }
+  .page.active-page.slide-out {
+    left: 100vw;
+    transition: left ease 300ms; }
+  .page.slide-in {
+    transition: left ease 300ms; }
+  @media (min-width: 768px) {
+    .page {
+      width: 77.88%; }
+      .page.active-page, .page.slide-in {
+        left: 11.11%; }
+      .page.active-page.slide-out {
+        left: 100vw; } }
+
+.navigation {
+  position: absolute;
+  top: 25px; }
+
+.nav-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex; }
+
+.nav-list-item {
+  margin-right: 20px;
+  font-size: 14px;
+  color: gray; }
+  .nav-list-item:last-child {
+    margin-right: 0; }
+  .nav-list-item.active-nav-item {
+    font-weight: bold;
+    cursor: default; }
+  .nav-list-item:not(.active-nav-item) {
+    cursor: pointer; }
+    .nav-list-item:not(.active-nav-item):hover {
+      text-decoration: underline; }
 
 #initial-input {
   font-size: 18px;
@@ -25,6 +72,9 @@ body {
   width: 215px;
   opacity: 0;
   caret-color: transparent; }
+
+.composition {
+  margin-bottom: 50px; }
 
 .composition-container {
   text-align: center;
@@ -49,14 +99,17 @@ body {
   margin: 0 auto; }
 
 .suggestion-field {
-  width: 33.33%;
+  flex-basis: 33.33%;
   max-width: 250px;
+  padding: 0 5px;
   text-align: center;
   line-height: 20px;
   height: 20px;
   font-size: 14px;
   color: gray;
   cursor: pointer; }
+  .suggestion-field:empty {
+    pointer-events: none; }
 
 .suggestion-field:not(:empty) {
   border-right: 1px solid gray; }
@@ -81,10 +134,10 @@ body {
   .button.restart {
     background-image: url(../assets/restart-key.png);
     left: 1px; }
-  .button.refresh {
-    background-image: url(../assets/refresh-key.png); }
   .button.back {
     background-image: url(../assets/backspace-key.png); }
+  .button.save {
+    background-image: url(../assets/save-key.png); }
   .button.disabled {
     opacity: .5; }
   @media (min-width: 550px) {
@@ -96,7 +149,7 @@ body {
   position: absolute;
   clip: rect(1px, 1px, 1px, 1px); }
 
-/* Animation */
+/* Cursor Animation */
 @-webkit-keyframes blink {
   0% {
     opacity: 1; }
@@ -111,3 +164,76 @@ body {
     opacity: 0; }
   100% {
     opacity: 1; } }
+.museum-entry {
+  color: midnightblue;
+  text-align: center;
+  margin: 0 21px;
+  padding: 37px 0;
+  border-bottom: 1px dotted gray; }
+
+.poem-composer {
+  color: gray;
+  font-size: 13px;
+  text-align: right; }
+  .poem-composer::before, .poem-composer::after {
+    content: '—'; }
+
+.save-poem-dialogue,
+.save-poem-overlay {
+  opacity: 0;
+  pointer-events: none; }
+  .dialogue-open .save-poem-dialogue, .dialogue-open
+  .save-poem-overlay {
+    pointer-events: all;
+    transition: opacity 300ms ease-in; }
+
+.save-poem-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  z-index: 1; }
+  .dialogue-open .save-poem-overlay {
+    opacity: .7; }
+
+.save-poem-dialogue {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  position: relative;
+  width: 80vw;
+  height: 50vw;
+  max-height: 200px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: lightgray;
+  z-index: 10; }
+  .dialogue-open .save-poem-dialogue {
+    opacity: 1; }
+
+.dialogue-text {
+  text-align: center; }
+
+.dialogue-input {
+  font-family: 'Cutive Mono', monospace;
+  font-size: 16px;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 5px 10px;
+  border: none; }
+  .dialogue-input:focus {
+    outline-color: darkgray; }
+
+.final-save-btn {
+  font-family: 'Cutive Mono', monospace;
+  text-transform: uppercase;
+  width: 120px;
+  height: 30px;
+  margin: 20px auto 0;
+  background-color: darkgray;
+  color: white;
+  cursor: pointer; }

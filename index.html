@@ -9,38 +9,87 @@
     <title>Muse Machina</title>
 </head>
 <body>
+
+    <!-- GLOBAL ELEMENTS -->
+    <nav class="navigation">
+        <ul class="nav-list">
+            <li class="nav-list-item active-nav-item" id="compose-link" data-page="compose-page" role="link">Compose</li>
+            <li class="nav-list-item" id="museum-link" data-page="museum-page" role="link">Museum</li>
+        </ul>
+    </nav>
+
     <header class="header">
         <h1 class="header-text">Muse Machina<span class="cursor">|</span></h1>
     </header>
+    <!-- / GLOBAL ELEMENTS -->
 
-    <section class="composition">
-        <input id="initial-input" autocomplete="off" autofocus>
-        <p class="composition-container">
-            <span id="composition-field">In a word, begin...</span>
-            <span class="cursor">|</span>
-        </p>
-    </section>
-    
-    <section class="suggestions">
-        <div class="suggestion-field"></div>
-        <div class="suggestion-field"></div>
-        <div class="suggestion-field"></div>
-    </section>
-    
-    <section class="buttons">
-        <button id="restart-btn" class="button restart disabled" title="start fresh">
-            <span class="sr-only">start fresh</span>
-        </button>
-        <!-- <button id="refresh-btn" class="button refresh disabled" title="refresh suggestions">
-            <span class="sr-only">refresh suggestions</span>
-        </button> -->
-        <button id="back-btn" class="button back disabled" title="delete previous word">
-            <span class="sr-only">delete previous word</span>
-        </button>
-    </section>
-    
-    <!-- <button id="generate-btn">Compose</button> -->
 
+    <!-- COMPOSE PAGE -->
+    <article class="page active-page" id="compose-page" aria-labelledby="compose-link">
+        <section class="composition">
+            <input id="initial-input" autocomplete="off" autofocus>
+            <p class="composition-container">
+                <span id="composition-field">In a word, begin...</span>
+                <span class="cursor">|</span>
+            </p>
+        </section>
+        
+        <section class="suggestions">
+            <div class="suggestion-field"></div>
+            <div class="suggestion-field"></div>
+            <div class="suggestion-field"></div>
+        </section>
+        
+        <section class="buttons">
+            <button id="restart-btn" class="button restart disabled" title="start fresh">
+                <span class="sr-only">start fresh</span>
+            </button>
+            <!-- <button id="refresh-btn" class="button refresh disabled" title="refresh suggestions">
+                <span class="sr-only">refresh suggestions</span>
+            </button> -->
+            <button id="back-btn" class="button back disabled" title="delete previous word">
+                <span class="sr-only">delete previous word</span>
+            </button>
+            <button id="save-btn" class="button save disabled" title="save to museum">
+                <span class="sr-only">save to museum</span>
+            </button>
+        </section>
+        
+        <!-- <button id="generate-btn">Compose</button> -->
+    </article>
+    <!-- / COMPOSE PAGE -->
+
+
+    <!-- MUSEUM PAGE -->
+    <article class="page" id="museum-page" aria-labelledby="museum-link">
+        <section id="musem-entries" class="musem-entries"></section>
+    </article>
+    <!-- / MUSEUM PAGE -->
+
+    
+    <!-- SAVE POEM DIALOGUE -->
+    <div class="save-poem-overlay"></div>
+    <section class="save-poem-dialogue">
+        <p class="dialogue-text">What's your pen name?</p>
+        <input id="penname" class="dialogue-input">
+        <button id="final-save-btn" class="final-save-btn">Save</button>
+    </section>
+    <!-- / SAVE POEM DIALOGUE -->
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-database.js"></script>
+    <script>
+    var config = {
+        apiKey: "AIzaSyDiDgx_g01uVSVA2oNiVnZ21H7szNNt_i8",
+        authDomain: "muse-machina.firebaseapp.com",
+        databaseURL: "https://muse-machina.firebaseio.com",
+        projectId: "muse-machina",
+        storageBucket: "muse-machina.appspot.com",
+        messagingSenderId: "738706313143"
+    };
+    firebase.initializeApp(config);
+    </script>
     <script src="public/data/dictionary.jsonp"></script>
     <script src="public/scripts/script.js"></script>
 </body>

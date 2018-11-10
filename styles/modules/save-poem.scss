@@ -1,0 +1,73 @@
+.save-poem-dialogue, 
+.save-poem-overlay {
+    opacity: 0;
+    pointer-events: none;
+
+    .dialogue-open & {
+        pointer-events: all;
+        transition: opacity 300ms ease-in;
+    }
+}
+
+.save-poem-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    z-index: 1;
+
+    .dialogue-open & {
+        opacity: .7;
+    }
+}
+
+.save-poem-dialogue {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    position: relative;
+    width: 80vw;
+    height: 50vw;
+    max-height: 200px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: lightgray;
+    z-index: 10;
+
+    .dialogue-open & {
+        opacity: 1;
+    }
+}
+
+.dialogue-text {
+    text-align: center;
+}
+
+.dialogue-input {
+    font-family: 'Cutive Mono', monospace;
+    font-size: 16px;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 5px 10px;
+    border: none;
+
+    &:focus {
+        outline-color: darkgray;
+    }
+}
+
+.final-save-btn {
+    font-family: 'Cutive Mono', monospace;
+    text-transform: uppercase;
+    width: 120px;
+    height: 30px;
+    margin: 20px auto 0;
+    background-color: darkgray;
+    color: white;
+    cursor: pointer;
+}
+
