@@ -51,13 +51,24 @@
     &:empty {
         pointer-events: none;
     }
-}
 
-.suggestion-field:not(:empty) {
-    border-right: 1px solid gray;
+    &:not(:empty) {
+        border-right: 1px solid gray;
 
-    &:first-child {
+        &:first-child {
+            border-left: 1px solid gray;
+        }
+    }
+
+    &.start-btn {
+        cursor: pointer;
+        pointer-events: all;
         border-left: 1px solid gray;
+        border-right: 1px solid gray;
+
+        &::after {
+            content: 'START';
+        }
     }
 }
 
@@ -117,7 +128,6 @@
     50% { opacity: 0; }
     100% { opacity: 1; }
 }
-
 @keyframes blink {
     0% { opacity: 1; }
     50% { opacity: 0; }

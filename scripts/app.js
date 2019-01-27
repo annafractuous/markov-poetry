@@ -1,6 +1,7 @@
 class App {
     constructor() {
         this.saveSelectors()
+        this.saveListenerCallbacks()
         this.addListeners()
 
         this.dictionary     = dictionary     // JSONP variable loaded via script tag
@@ -19,12 +20,18 @@ class App {
         this.suggestionEls = document.getElementsByClassName('suggestion-field')
         this.composition   = document.getElementById('composition-field')
         this.input         = document.getElementById('initial-input')
+        this.startBtn      = this.suggestionEls[1]
         this.restartBtn    = document.getElementById('restart-btn')
         this.backBtn       = document.getElementById('back-btn')
         this.saveBtn       = document.getElementById('save-btn')
-        this.finalSaveBtn  = document.getElementById('final-save-btn')
+        this.dbSaveBtn     = document.getElementById('db-save-btn')
         this.museumEntries = document.getElementById('musem-entries')
         // this.refreshBtn    = document.getElementById('refresh-btn')
+    }
+
+    saveListenerCallbacks() {
+        this.startCallback = () => this.start()
+        this.selectionCallback = (e) => this.updateComposition(e)
     }
 
     addListeners() {
@@ -33,8 +40,8 @@ class App {
         this.activeListener()
         this.inactiveListener()
         this.typingListener()
+        this.startListener(true)
         this.backspaceListener()
-        this.selectionListener()
         this.buttonListeners()
     }
 
@@ -61,7 +68,15 @@ class App {
     }
 
     typingListener() {
-        this.input.addEventListener('input', (e) => this.readInput(e))
+        this.input.addEventListener('input', (e) => this.type(e))
+    }
+
+    startListener(enabled) {
+        if (enabled) {
+            this.startBtn.addEventListener('click', this.startCallback)
+        } else {
+            this.startBtn.removeEventListener('click', this.startCallback)
+        }
     }
 
     backspaceListener() {
@@ -72,17 +87,23 @@ class App {
         })
     }
 
-    selectionListener() {
-        [...this.suggestionEls].forEach((el) => {
-            el.addEventListener('click', (e) => this.updateComposition(e))
-        })
+    selectionListener(enabled) {
+        if (enabled) {
+            [...this.suggestionEls].forEach((el) => {
+                el.addEventListener('click', this.selectionCallback)
+            })
+        } else {
+            [...this.suggestionEls].forEach((el) => {
+                el.removeEventListener('click', this.selectionCallback)
+            })
+        }
     }
 
     buttonListeners() {
         this.restartBtn.addEventListener('click', () => this.restartComposition())
         this.backBtn.addEventListener('click', () => this.deleteLastWord())
         this.saveBtn.addEventListener('click', () => this.toggleSaveDialogue(true))
-        this.finalSaveBtn.addEventListener('click', () => this.savePoem())
+        this.dbSaveBtn.addEventListener('click', () => this.savePoem())
         // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
     }
 
@@ -94,7 +115,7 @@ class App {
 
         if (nextPage !== this.activePage) {
             if (!this.museumLoaded && nextPage.id === 'museum-page') this.loadMuseum()
-            
+
             this.navigate(nextPage)
             this.updateActiveNav(pageSelection)
         }
@@ -109,14 +130,14 @@ class App {
             this.activePage.classList.remove('slide-out')
             nextPage.classList.add('active-page')
             nextPage.classList.remove('slide-in')
-            
+
             this.activePage = nextPage
         }, 300)     // 300ms = sliding transition speed
     }
 
     updateActiveNav(pageSelection) {
         const nextNav = document.querySelector('[data-page=' + pageSelection)
-        
+
         this.activeNav.classList.remove('active-nav-item')
         nextNav.classList.add('active-nav-item')
 
@@ -125,7 +146,7 @@ class App {
 
 /* INPUT /------- */
 
-    readInput(e) {
+    type(e) {
         let word
 
         word = e.target.value
@@ -134,10 +155,26 @@ class App {
 
         this.composition.innerText = word
 
-        this.getSuggestions(word)
+        this.showStart(!!word.length)
+    }
 
-        const buttonsDisabled = !word.length
-        this.toggleButtonsState(buttonsDisabled)
+    showStart(show) {
+        show ? this.startBtn.classList.add('start-btn') : this.startBtn.classList.remove('start-btn')
+    }
+
+    start() {
+        this.showStart(false)
+        this.startListener(false)
+        this.selectionListener(true)
+        this.disableInput()
+        this.readInput()
+    }
+
+    readInput() {
+        const word = this.composition.innerText
+
+        this.showSuggestions(word)
+        this.toggleButtonsState(true)
     }
 
     disableInput() {
@@ -160,11 +197,7 @@ class App {
 
         if (word) {
             this.addNextWord(word)
-            this.getSuggestions(word)
-
-            if (this.firstWord) {
-                this.disableInput()
-            }
+            this.showSuggestions(word)
         }
     }
 
@@ -197,44 +230,53 @@ class App {
 
         this.enableInput()
         this.clearSuggestions()
-        this.toggleButtonsState(true)
+        this.toggleButtonsState(false)
+        this.startListener(true)
     }
 
 /* SUGGESTIONS /------- */
 
+    showSuggestions(word) {
+        const suggestions = this.getSuggestions(word)
+        this.returnSuggestions(suggestions)
+    }
+
     getSuggestions(word) {
         const possibilities = this.dictionary[word]
+        const uniquePossibilities = this.makeUnique(possibilities)
+        
         let suggestions = []
 
-        if (possibilities) {
-            const uniquePossibilities = this.makeUnique(possibilities)
-
-            if (uniquePossibilities.length <= 3) {
-                suggestions = uniquePossibilities
-            } else {
-                while (suggestions.length < 3) {
-                    let suggestion = this.getRandomEl(possibilities)
-                    if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
-                }
+        if (uniquePossibilities.length < 3) {
+            const defaultsNeeded = 3 - uniquePossibilities.length
+            const defaults = this.getDefaults(defaultsNeeded)
+            suggestions = [...uniquePossibilities, ...defaults]
+        } else if (uniquePossibilities.length === 3) {
+            suggestions = uniquePossibilities
+        } else {
+            while (suggestions.length < 3) {
+                let suggestion = this.getRandomEl(possibilities)
+                if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
             }
         }
 
-        this.returnSuggestions(suggestions)
+        return suggestions
+    }
+
+    getDefaults(defaultsNeeded) {
+        const defaults = this.getSuggestions('the')
+        return defaults.slice(0, defaultsNeeded)
     }
 
     returnSuggestions(suggestions) {
         for (let i = 0, l = 3; i < l; i++) {
-            if (suggestions[i]) {
-                this.suggestionEls[i].innerText = suggestions[i]
-            } else {
-                this.suggestionEls[i].innerText = ''
-            }
+            this.suggestionEls[i].innerText = suggestions[i]
         }
     }
 
     refreshSuggestions() {
         const lastWord = this.getLastWord()
-        this.getSuggestions(lastWord)
+        this.showSuggestions(lastWord)
     }
 
     clearSuggestions() {
@@ -251,7 +293,7 @@ class App {
 
         this.museumLoaded = true
     }
-    
+
     initializeFirebase() {
         this.db = firebase.database()
         this.poemsDB = this.db.ref('poems')
@@ -260,7 +302,7 @@ class App {
     }
 
     fetchPoems() {
-        // TO DO: 
+        // TO DO:
         // // 1. paginate or lazy-load the museum, loading 20 at a time
         // // 2. save the first 20 to localStorage
         this.poemsDB.limitToLast(20).on('value', (snapshot) => {
@@ -288,7 +330,7 @@ class App {
     savePoem() {
         const poem = this.composition.innerText
         const penname = document.getElementById('penname').value
-        
+
         if (!this.dbInitialized) this.initializeFirebase()
         this.savePoemToDB(poem, penname)
 
@@ -314,10 +356,10 @@ class App {
         open ? body.classList.add('dialogue-open') : body.classList.remove('dialogue-open')
     }
 
-    toggleButtonsState(disabledState) {
+    toggleButtonsState(enabledState) {
         // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
         [this.restartBtn, this.backBtn, this.saveBtn].forEach((btn) => {
-            disabledState ? btn.classList.add('disabled') : btn.classList.remove('disabled')
+            enabledState ? btn.classList.remove('disabled') : btn.classList.add('disabled')
         })
     }
 
