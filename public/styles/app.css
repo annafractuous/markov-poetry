@@ -101,7 +101,7 @@ body {
 .suggestion-field {
   flex-basis: 33.33%;
   max-width: 250px;
-  padding: 0 5px;
+  padding: 0 10px;
   text-align: center;
   line-height: 20px;
   height: 20px;
@@ -130,7 +130,7 @@ body {
 .button {
   height: 30px;
   width: 30px;
-  margin-right: 10px;
+  margin-right: 15px;
   border-radius: 50%;
   border: none;
   background-size: 110%;
@@ -239,7 +239,7 @@ body {
   .dialogue-input:focus {
     outline-color: darkgray; }
 
-.final-save-btn {
+.db-save-btn {
   font-family: 'Cutive Mono', monospace;
   text-transform: uppercase;
   width: 120px;
