@@ -239,7 +239,7 @@ body {
   .dialogue-input:focus {
     outline-color: darkgray; }
 
-.final-save-btn {
+.db-save-btn {
   font-family: 'Cutive Mono', monospace;
   text-transform: uppercase;
   width: 120px;
