@@ -173,7 +173,7 @@ class App {
     readInput() {
         const word = this.composition.innerText
 
-        this.getSuggestions(word)
+        this.showSuggestions(word)
         this.toggleButtonsState(true)
     }
 
@@ -197,7 +197,7 @@ class App {
 
         if (word) {
             this.addNextWord(word)
-            this.getSuggestions(word)
+            this.showSuggestions(word)
         }
     }
 
@@ -236,49 +236,47 @@ class App {
 
 /* SUGGESTIONS /------- */
 
-    getSuggestions(word) {
-        const possibilities = this.dictionary[word]
-        let suggestions = []
-
-        if (possibilities) {
-            const uniquePossibilities = this.makeUnique(possibilities)
-
-            if (uniquePossibilities.length < 3) {
-                // const defaultsNeeded = 3 - uniquePossibilities.length
-                // this.checkForDefaults(word, defaultsNeeded)
-                suggestions = uniquePossibilities
-            } else if (uniquePossibilities.length === 3) {
-                suggestions = uniquePossibilities
-            } else {
-                while (suggestions.length < 3) {
-                    let suggestion = this.getRandomEl(possibilities)
-                    if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
-                }
-            }
-        } else {
-            // this.checkForDefaults(word, 3)
-        }
-
+    showSuggestions(word) {
+        const suggestions = this.getSuggestions(word)
         this.returnSuggestions(suggestions)
     }
 
-    checkForDefaults(word, defaultsNeeded) {
+    getSuggestions(word) {
+        const possibilities = this.dictionary[word]
+        const uniquePossibilities = this.makeUnique(possibilities)
+        
+        let suggestions = []
 
+        if (uniquePossibilities.length < 3) {
+            const defaultsNeeded = 3 - uniquePossibilities.length
+            const defaults = this.getDefaults(defaultsNeeded)
+            suggestions = [...uniquePossibilities, ...defaults]
+        } else if (uniquePossibilities.length === 3) {
+            suggestions = uniquePossibilities
+        } else {
+            while (suggestions.length < 3) {
+                let suggestion = this.getRandomEl(possibilities)
+                if (!suggestions.includes(suggestion)) suggestions.push(suggestion)
+            }
+        }
+
+        return suggestions
+    }
+
+    getDefaults(defaultsNeeded) {
+        const defaults = this.getSuggestions('the')
+        return defaults.slice(0, defaultsNeeded)
     }
 
     returnSuggestions(suggestions) {
         for (let i = 0, l = 3; i < l; i++) {
-            if (suggestions[i]) {
-                this.suggestionEls[i].innerText = suggestions[i]
-            } else {
-                this.suggestionEls[i].innerText = ''
-            }
+            this.suggestionEls[i].innerText = suggestions[i]
         }
     }
 
     refreshSuggestions() {
         const lastWord = this.getLastWord()
-        this.getSuggestions(lastWord)
+        this.showSuggestions(lastWord)
     }
 
     clearSuggestions() {
