@@ -15,6 +15,7 @@
         <ul class="nav-list">
             <li class="nav-list-item active-nav-item" id="compose-link" data-page="compose-page" role="link">Compose</li>
             <li class="nav-list-item" id="museum-link" data-page="museum-page" role="link">Museum</li>
+            <li class="nav-list-item" id="about-link" data-page="about-page" role="link">About</li>
         </ul>
     </nav>
 
@@ -33,13 +34,13 @@
                 <span class="cursor">|</span>
             </p>
         </section>
-        
+
         <section class="suggestions">
             <div class="suggestion-field"></div>
             <div class="suggestion-field"></div>
             <div class="suggestion-field"></div>
         </section>
-        
+
         <section class="buttons">
             <button id="restart-btn" class="button restart disabled" title="start fresh">
                 <span class="sr-only">start fresh</span>
@@ -54,7 +55,7 @@
                 <span class="sr-only">save to museum</span>
             </button>
         </section>
-        
+
         <!-- <button id="generate-btn">Compose</button> -->
     </article>
     <!-- / COMPOSE PAGE -->
@@ -66,13 +67,26 @@
     </article>
     <!-- / MUSEUM PAGE -->
 
-    
+
+    <!-- ABOUT PAGE -->
+    <article class="page" id="about-page" aria-labelledby="about-link">
+        <section class="about">
+            <p>Musa Machina is a poetic predictive text generator, its word bank fed exclusively by the springs of literary works. To compose, enter an initial word and press start. Backspacing will refresh the suggestions.</p>
+
+            <p>Created as a passion project by Anna Rasshivkina.</p>
+
+            <p class="postscript">P.S. Muse Machina is always looking for new texts! What works best are pieces of writing composed of beautiful sentences, comprising unique word pairs. The corpus currently includes works by Annie Dillard, Italo Calvino, Pablo Neruda, Mary Oliver, and Leonard Cohen, among others. If you have a suggestion, please <a id="email-suggestions" href="mailto:annarasshivkina@gmail.com?subject=Muse+Machina+Suggestion" target="_blank">email me</a>.</p>
+        </section>
+    </article>
+    <!-- / ABOUT PAGE -->
+
+
     <!-- SAVE POEM DIALOGUE -->
     <div class="save-poem-overlay"></div>
     <section class="save-poem-dialogue">
         <p class="dialogue-text">What's your pen name?</p>
         <input id="penname" class="dialogue-input">
-        <button id="final-save-btn" class="final-save-btn">Save</button>
+        <button id="db-save-btn" class="db-save-btn">Save</button>
     </section>
     <!-- / SAVE POEM DIALOGUE -->
 

@@ -110,11 +110,17 @@ body {
   cursor: pointer; }
   .suggestion-field:empty {
     pointer-events: none; }
-
-.suggestion-field:not(:empty) {
-  border-right: 1px solid gray; }
-  .suggestion-field:not(:empty):first-child {
-    border-left: 1px solid gray; }
+  .suggestion-field:not(:empty) {
+    border-right: 1px solid gray; }
+    .suggestion-field:not(:empty):first-child {
+      border-left: 1px solid gray; }
+  .suggestion-field.start-btn {
+    cursor: pointer;
+    pointer-events: all;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray; }
+    .suggestion-field.start-btn::after {
+      content: 'START'; }
 
 .buttons {
   display: flex;
@@ -167,7 +173,7 @@ body {
 .museum-entry {
   color: midnightblue;
   text-align: center;
-  margin: 0 21px;
+  margin: 0 20px;
   padding: 37px 0;
   border-bottom: 1px dotted gray; }
 
@@ -177,6 +183,11 @@ body {
   text-align: right; }
   .poem-composer::before, .poem-composer::after {
     content: '—'; }
+
+.about p {
+  margin: 24px 20px; }
+  .about p.postscript {
+    font-size: 13px; }
 
 .save-poem-dialogue,
 .save-poem-overlay {
