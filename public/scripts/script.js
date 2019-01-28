@@ -27,7 +27,6 @@ class App {
         this.shareBtn       = document.getElementById('share-btn')
         this.dbSaveBtn     = document.getElementById('db-save-btn')
         this.museumEntries = document.getElementById('musem-entries')
-        // this.refreshBtn    = document.getElementById('refresh-btn')
     }
 
     saveListenerCallbacks() {
@@ -105,7 +104,6 @@ class App {
         this.backBtn.addEventListener('click', () => this.deleteLastWord())
         this.saveBtn.addEventListener('click', () => this.toggleSaveDialogue(true))
         this.dbSaveBtn.addEventListener('click', () => this.savePoem())
-        // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
     }
 
 /* NAVIGATION /------- */
@@ -358,7 +356,6 @@ class App {
     }
 
     toggleButtonsState(enabledState) {
-        // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
         [this.restartBtn, this.backBtn, this.saveBtn, this.shareBtn].forEach((btn) => {
             enabledState ? btn.classList.remove('disabled') : btn.classList.add('disabled')
         })
