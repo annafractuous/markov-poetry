@@ -106,6 +106,10 @@
         background-image: url(../assets/save-key.png);
     }
 
+    &.share {
+        background-image: url(../assets/share-key.png);
+    }
+
     &.disabled {
         opacity: .5;
     }

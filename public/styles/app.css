@@ -144,6 +144,8 @@ body {
     background-image: url(../assets/backspace-key.png); }
   .button.save {
     background-image: url(../assets/save-key.png); }
+  .button.share {
+    background-image: url(../assets/share-key.png); }
   .button.disabled {
     opacity: .5; }
   @media (min-width: 550px) {

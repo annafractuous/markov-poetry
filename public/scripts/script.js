@@ -24,6 +24,7 @@ class App {
         this.restartBtn    = document.getElementById('restart-btn')
         this.backBtn       = document.getElementById('back-btn')
         this.saveBtn       = document.getElementById('save-btn')
+        this.shareBtn       = document.getElementById('share-btn')
         this.dbSaveBtn     = document.getElementById('db-save-btn')
         this.museumEntries = document.getElementById('musem-entries')
         // this.refreshBtn    = document.getElementById('refresh-btn')
@@ -358,7 +359,7 @@ class App {
 
     toggleButtonsState(enabledState) {
         // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
-        [this.restartBtn, this.backBtn, this.saveBtn].forEach((btn) => {
+        [this.restartBtn, this.backBtn, this.saveBtn, this.shareBtn].forEach((btn) => {
             enabledState ? btn.classList.remove('disabled') : btn.classList.add('disabled')
         })
     }
