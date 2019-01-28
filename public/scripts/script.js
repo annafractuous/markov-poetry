@@ -24,9 +24,12 @@ class App {
         this.restartBtn    = document.getElementById('restart-btn')
         this.backBtn       = document.getElementById('back-btn')
         this.saveBtn       = document.getElementById('save-btn')
+        this.shareBtn      = document.getElementById('share-btn')
+        this.fbBtn         = document.getElementById('share-fb-btn')
+        this.twitterBtn    = document.getElementById('share-twitter-btn')
+        this.shareBtns     = document.getElementById('share-btns')
         this.dbSaveBtn     = document.getElementById('db-save-btn')
         this.museumEntries = document.getElementById('musem-entries')
-        // this.refreshBtn    = document.getElementById('refresh-btn')
     }
 
     saveListenerCallbacks() {
@@ -49,7 +52,7 @@ class App {
 
     overlayListener() {
         const overlay = document.querySelector('.save-poem-overlay')
-        overlay.addEventListener('click', () => this.toggleSaveDialogue(false))
+        overlay.addEventListener('click', () => this.toggleSaveDialogue())
     }
 
     navListener() {
@@ -102,9 +105,11 @@ class App {
     buttonListeners() {
         this.restartBtn.addEventListener('click', () => this.restartComposition())
         this.backBtn.addEventListener('click', () => this.deleteLastWord())
-        this.saveBtn.addEventListener('click', () => this.toggleSaveDialogue(true))
+        this.saveBtn.addEventListener('click', () => this.toggleSaveDialogue())
+        this.shareBtn.addEventListener('click', () => this.toggleShareButtons())
+        this.fbBtn.addEventListener('click', () => this.shareToFB())
+        this.twitterBtn.addEventListener('click', () => this.shareToTwitter())
         this.dbSaveBtn.addEventListener('click', () => this.savePoem())
-        // this.refreshBtn.addEventListener('click', () => this.refreshSuggestions())
     }
 
 /* NAVIGATION /------- */
@@ -334,7 +339,7 @@ class App {
         if (!this.dbInitialized) this.initializeFirebase()
         this.savePoemToDB(poem, penname)
 
-        this.toggleSaveDialogue(false)
+        this.toggleSaveDialogue()
     }
 
     savePoemToDB(poem, user) {
@@ -351,16 +356,18 @@ class App {
 
 /* UI STATES /------- */
 
-    toggleSaveDialogue(open) {
-        const body = document.body
-        open ? body.classList.add('dialogue-open') : body.classList.remove('dialogue-open')
-    }
-
     toggleButtonsState(enabledState) {
-        // [this.restartBtn, this.refreshBtn, this.backBtn].forEach((btn) => {
-        [this.restartBtn, this.backBtn, this.saveBtn].forEach((btn) => {
+        [this.restartBtn, this.backBtn, this.saveBtn, this.shareBtn].forEach((btn) => {
             enabledState ? btn.classList.remove('disabled') : btn.classList.add('disabled')
         })
+    }
+
+    toggleSaveDialogue() {
+        document.body.classList.toggle('dialogue-open')
+    }
+    
+    toggleShareButtons() {
+        this.shareBtns.classList.toggle('expanded')
     }
 
     clearDefaultText() {
@@ -373,6 +380,23 @@ class App {
         if (e.target.id !== 'initial-input' && this.input.value == '') {
             this.composition.innerText = this.defaultText
         }
+    }
+
+/* SHARING /------- */
+
+    shareToFB() {
+        const encodedPoem = encodeURI(this.composition.innerText)
+        window.open(`https://www.facebook.com/dialog/share?app_id=344145906430055&display=popup&href=https%3A%2F%2Fmusemachina.com&quote=${encodedPoem}`, '_blank')
+
+        this.toggleShareButtons()
+    }
+    
+    shareToTwitter() {
+        const text = `"${this.composition.innerText}" | composing computer poetry at https://musemachina.com`
+        const encoded = encodeURI(text)
+        window.open(`https://twitter.com/intent/tweet?text=${encoded}`, '_blank')
+
+        this.toggleShareButtons()
     }
 
 /* UTILS /------- */
