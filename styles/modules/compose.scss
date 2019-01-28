@@ -106,8 +106,17 @@
         background-image: url(../assets/share-key.png);
     }
 
+    &.share-fb {
+        background-image: url(../assets/facebook-key.png);
+    }
+
+    &.share-twitter {
+        background-image: url(../assets/twitter-key.png);
+    }
+
     &.disabled {
         opacity: .5;
+        pointer-events: none;
     }
 
     @media (min-width: 550px) {
@@ -116,9 +125,65 @@
     }
 }
 
+.sharing {
+    position: relative;
+
+    .button {
+        margin-right: 0;
+    }
+    
+    .share {
+        position: relative;
+        z-index: 10;
+    }
+
+    .social-btn {
+        position: absolute;
+        top: 2.5px;
+        left: 0px;
+        height: 25px;
+        width: 25px;
+        z-index: 1;
+        opacity: 0;
+        pointer-events: none;
+        transition: left 200ms ease-in, opacity 0s ease 200ms;
+
+        @media (min-width: 550px) {
+            height: 30px;
+            width:  30px;
+        }
+    }
+
+    &.expanded {
+        .social-btn {
+            opacity: 1;
+            pointer-events: all;
+            transition: left 200ms ease-in;
+
+            &.share-fb {
+                left: 35px;
+
+                @media (min-width: 550px) {
+                    left:  40px;
+                }
+            }
+
+            &.share-twitter {
+                left: 65px;
+
+                @media (min-width: 550px) {
+                    left:  75px;
+                }
+            }
+        }
+    }
+}
+
 .sr-only {
     position: absolute;
-    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
 }
 
 /* Cursor Animation */

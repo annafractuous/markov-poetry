@@ -12,6 +12,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta property="fb:app_id" content="344145906430055">
+    <meta property="og:url" content="https://musemachina.com">
+    <meta property="og:title" content="Muse Machina">
+    <meta property="og:image" content="public/assets/screenshot.png">
+    <meta property="og:description" content="Musa Machina is a poetic predictive text generator, its word bank fed exclusively by the springs of literary works.">
+
     <link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="public/styles/app.min.css">
     <title>Muse Machina</title>
@@ -59,9 +65,17 @@
             <button id="save-btn" class="button save disabled" title="save to museum">
                 <span class="sr-only">save to museum</span>
             </button>
-            <button id="share-btn" class="button share disabled" title="share to social media">
-                <span class="sr-only">share to social media</span>
-            </button>
+            <div id="share-btns" class="sharing">
+                <button id="share-btn" class="button share disabled" title="share to social media">
+                    <span class="sr-only">share to social media</span>
+                </button>
+                <button id="share-fb-btn" class="button social-btn share-fb" title="share to facebook">
+                    <span class="sr-only">share to facebook</span>
+                </button>
+                <button id="share-twitter-btn" class="button social-btn share-twitter" title="share to twitter">
+                    <span class="sr-only">share to twitter</span>
+                </button>
+            </div>
         </section>
     </article>
     <!-- / COMPOSE PAGE -->
