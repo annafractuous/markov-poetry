@@ -1,9 +1,21 @@
 .about {
+    .bold {
+        font-weight: bold;
+    }
+
     p {
+        line-height: 1.3em;
         margin: 24px 20px;
 
         &.postscript {
             font-size: 13px;
+        }
+
+        &:not(.postscript) {
+            .bold {
+                display: block;
+                margin-bottom: 5px;
+            }
         }
     }
 }
