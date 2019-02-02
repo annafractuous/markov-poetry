@@ -7,10 +7,10 @@ body {
       padding: 11.11%; } }
 
 .header {
-  margin: 50px 0; }
+  margin: 50px 0 30px; }
   @media (min-width: 768px) {
     .header {
-      margin: 15px 0 50px 0; } }
+      margin: 15px 0 30px 0; } }
 
 .header-text {
   font-weight: bold;
@@ -64,6 +64,9 @@ body {
     cursor: pointer; }
     .nav-list-item:not(.active-nav-item):hover {
       text-decoration: underline; }
+
+.page#compose-page {
+  margin-top: 10px; }
 
 #initial-input {
   font-size: 18px;
@@ -221,6 +224,8 @@ body {
   margin: 0 20px;
   padding: 37px 0;
   border-bottom: 1px dotted gray; }
+  .museum-entry:first-child {
+    padding-top: 10px; }
 
 .poem-composer {
   color: gray;
@@ -229,10 +234,16 @@ body {
   .poem-composer::before, .poem-composer::after {
     content: '—'; }
 
+.about .bold {
+  font-weight: bold; }
 .about p {
+  line-height: 1.3em;
   margin: 24px 20px; }
   .about p.postscript {
     font-size: 13px; }
+  .about p:not(.postscript) .bold {
+    display: block;
+    margin-bottom: 5px; }
 
 .save-poem-dialogue,
 .save-poem-overlay {
