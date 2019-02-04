@@ -302,5 +302,6 @@ body {
   height: 30px;
   margin: 20px auto 0;
   background-color: darkgray;
+  border: none;
   color: white;
   cursor: pointer; }
