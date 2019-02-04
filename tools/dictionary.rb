@@ -41,7 +41,7 @@ class Dictionary
 
     def normalize_text(corpus)
         corpus.downcase!
-        corpus.gsub!(/[^\sa-z;.!?'"‘’“”]+/, ' ').gsub!(/\s{2,}/, ' ')
+        corpus.gsub!(/[^\sa-z;.!?'‘’]+|\.\.\./, ' ').gsub!(/\s{2,}/, ' ')
     end
 
     def loop_through(words)
