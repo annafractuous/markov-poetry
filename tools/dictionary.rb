@@ -48,13 +48,14 @@ class Dictionary
         order = 1
         end_idx = words.length - order
         punctuation_regex = /\.|\?|;|!/
+        skip_words = ["vhd", "vhd's", "xlthlx", "burke", "qfwfq"]
 
         for i in 0...end_idx do
             next if punctuation_regex.match(words[i])   # don't create entry if we're at the end of a sentence
 
             gram, next_word = get_entry(words[i..i + order])
 
-            save_entry(gram, next_word)
+            save_entry(gram, next_word) if !skip_words.include?(gram) && !skip_words.include?(next_word)
         end
     end
 
