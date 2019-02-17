@@ -1,3 +1,5 @@
+throttle = require('lodash.throttle')
+
 class App {
     constructor() {
         this.saveSelectors()
@@ -10,6 +12,7 @@ class App {
         this.firstWord      = true
         this.dbInitialized  = false
         this.museumLoaded   = false
+        this.poemsPerPage   = 20
 
         console.log(dictionary)
     }
@@ -29,12 +32,13 @@ class App {
         this.twitterBtn    = document.getElementById('share-twitter-btn')
         this.shareBtns     = document.getElementById('share-btns')
         this.dbSaveBtn     = document.getElementById('db-save-btn')
-        this.museumEntries = document.getElementById('musem-entries')
+        this.museumEntries = document.getElementById('museum-entries')
     }
 
     saveListenerCallbacks() {
         this.startCallback = () => this.start()
         this.selectionCallback = (e) => this.updateComposition(e)
+        this.museumScrollCallback = throttle(() => this.museumLoadMore(), 1000)
     }
 
     addListeners() {
@@ -75,11 +79,7 @@ class App {
     }
 
     startListener(enabled) {
-        if (enabled) {
-            this.startBtn.addEventListener('click', this.startCallback)
-        } else {
-            this.startBtn.removeEventListener('click', this.startCallback)
-        }
+        enabled ? this.startBtn.addEventListener('click', this.startCallback) : this.startBtn.removeEventListener('click', this.startCallback)
     }
 
     backspaceListener() {
@@ -100,6 +100,10 @@ class App {
                 el.removeEventListener('click', this.selectionCallback)
             })
         }
+    }
+
+    scrollListener(enabled) {
+        enabled ? window.addEventListener('scroll', this.museumScrollCallback) : window.removeEventListener('scroll', this.museumScrollCallback)
     }
 
     buttonListeners() {
@@ -291,10 +295,11 @@ class App {
     }
 
 /* MUSEUM /------- */
-
+    
     loadMuseum() {
         if (!this.dbInitialized) this.initializeFirebase()
-        this.fetchPoems()
+        this.fetchPoems(true)
+        this.scrollListener(true)
 
         this.museumLoaded = true
     }
@@ -306,19 +311,29 @@ class App {
         this.dbInitialized = true
     }
 
-    fetchPoems() {
-        // TO DO:
-        // // 1. paginate or lazy-load the museum, loading 20 at a time
-        // // 2. save the first 20 to localStorage
-        this.poemsDB.limitToLast(20).on('value', (snapshot) => {
-            this.displayPoems(snapshot.val())
+    fetchPoems(firstPage) {
+        const query = firstPage ? this.poemsDB : this.poemsDB.orderByKey().endAt(this.lastPoem)
+
+        query.limitToLast(this.poemsPerPage + 1).on('value', (snapshot) => {
+            this.processPoems(snapshot.val(), firstPage)
         }, (errorObject) => {
             console.log('The read failed: ', errorObject)
         })
     }
 
+    processPoems(data) {
+        const keys = Object.keys(data)
+        const noMorePoems = keys.length < this.poemsPerPage
+        const poems = noMorePoems ? Object.values(data) : Object.values(data).slice[1]
+        
+        if (noMorePoems) this.scrollListener(false)
+        this.lastPoem = keys[0]
+
+        this.displayPoems(poems)
+    }
+
     displayPoems(poems) {
-        poems = Object.values(poems).reverse()
+        poems = poems.reverse()
         poems.forEach((poem) => this.displayPoem(poem))
     }
 
@@ -330,6 +345,13 @@ class App {
             </div>
         `
         this.museumEntries.innerHTML += html
+    }
+
+    museumLoadMore() {
+        if (this.activePage.id === 'museum-page') {
+            const distanceFromBottom = this.museumEntries.getBoundingClientRect().bottom - window.innerHeight
+            if (distanceFromBottom <= window.innerHeight) this.fetchPoems()
+        }
     }
 
     savePoem() {

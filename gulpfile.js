@@ -1,6 +1,8 @@
 // Gulp – compile & minify files, run server, watch for changes
 var gulp         = require('gulp'),
-    concat       = require('gulp-concat'),            // concatenate scripts
+    browserify   = require('browserify'),             // bundle packages for client-side use
+    source       = require('vinyl-source-stream'),    // convert to vinyl-backed stream
+    buffer       = require('vinyl-buffer'),           // convert back to buffered for plugins that don't allow streaming
     babel        = require('gulp-babel'),             // transpile scripts to ES6
     uglify       = require('gulp-uglify'),            // minify scripts
     scss         = require('gulp-scss'),              // compile SCSS files to CSS
@@ -31,10 +33,15 @@ gulp.task('styles',function(cb) {
   Concatenate JS
 */
 gulp.task('scripts', function(cb) {
+    var browserifySrc = browserify({
+        entries: 'scripts/app.js',
+        debug: true
+    }).bundle()
     pump([
-        gulp.src('scripts/app.js'),
-        concat('script.js'),
+        browserifySrc,
+        source('script.js'),
         gulp.dest('public/scripts'),
+        buffer(),
         babel({ presets: ['env'] }),
         uglify(),
         rename({ suffix: '.min' }),
@@ -58,8 +65,7 @@ gulp.task('webserver', function() {
     gulp.src('.')
         .pipe(webserver({
             livereload: true,
-            directoryListing: true,
-            open: true
+            directoryListing: true
         }));
 });
 
