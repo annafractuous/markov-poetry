@@ -324,7 +324,7 @@ class App {
     processPoems(data) {
         const keys = Object.keys(data)
         const noMorePoems = keys.length < this.poemsPerPage
-        const poems = noMorePoems ? Object.values(data) : Object.values(data).slice[1]
+        const poems = noMorePoems ? Object.values(data) : Object.values(data).slice(1)
         
         if (noMorePoems) this.scrollListener(false)
         this.lastPoem = keys[0]
