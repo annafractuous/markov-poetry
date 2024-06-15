@@ -21,7 +21,7 @@ class Dictionary
     end
 
     def set_corpus_paths
-        @corpora.map! { |path| "data/#{path}" }
+        @corpora.map! { |path| "markov-source/#{path}" }
     end
 
     def read_files
