@@ -21,11 +21,12 @@ class Dictionary
     end
 
     def set_corpus_paths
-        @corpora.map! { |path| "data/#{path}" }
+        @corpora.map! { |path| "markov-source/#{path}" }
     end
 
     def read_files
         @corpora.map! do |corpus|
+						# binding.pry
             File.open(corpus) { |f| f.read }
         end
     end
@@ -90,8 +91,7 @@ end
 
 ######
 # To Run in Terminal:
-#   ruby dictionary.rb
-#
+#   ruby tools/dictionary.rb
 ######
 
 Dictionary.new([
