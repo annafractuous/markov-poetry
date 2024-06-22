@@ -1,140 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133276102-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-133276102-1');
-    </script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLKNESDS0Z"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-PLKNESDS0Z');
+	</script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta property="fb:app_id" content="344145906430055">
-    <meta property="og:url" content="https://musemachina.com">
-    <meta property="og:title" content="Muse Machina">
-    <meta property="og:description" content="Muse Machina is a poetic predictive text generator, its word bank fed exclusively by the springs of literary works.">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta property="fb:app_id" content="344145906430055">
+	<meta property="og:url" content="https://musemachina.com">
+	<meta property="og:title" content="Muse Machina">
+	<meta property="og:description"
+		content="Muse Machina is a poetic predictive text generator, its word bank fed exclusively by the springs of literary works.">
 
-    <link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="public/styles/app.min.css">
-    <title>Muse Machina</title>
+	<link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="public/styles/app.min.css">
+	<title>Muse Machina</title>
 </head>
+
 <body>
 
-    <!-- GLOBAL ELEMENTS -->
-    <nav class="navigation">
-        <ul class="nav-list">
-            <li class="nav-list-item active-nav-item" id="compose-link" data-page="compose-page" role="link">Compose</li>
-            <li class="nav-list-item" id="museum-link" data-page="museum-page" role="link">Museum</li>
-            <li class="nav-list-item" id="about-link" data-page="about-page" role="link">About</li>
-        </ul>
-    </nav>
+	<!-- GLOBAL ELEMENTS -->
+	<nav class="navigation">
+		<ul class="nav-list">
+			<li class="nav-list-item active-nav-item" id="compose-link" data-page="compose-page" role="link">Compose</li>
+			<li class="nav-list-item" id="museum-link" data-page="museum-page" role="link">Museum</li>
+			<li class="nav-list-item" id="about-link" data-page="about-page" role="link">About</li>
+		</ul>
+	</nav>
 
-    <header class="header">
-        <h1 class="header-text">Muse Machina<span class="cursor">|</span></h1>
-    </header>
-    <!-- / GLOBAL ELEMENTS -->
-
-
-    <!-- COMPOSE PAGE -->
-    <article class="page active-page" id="compose-page" aria-labelledby="compose-link">
-        <section class="composition">
-            <input id="initial-input" autocomplete="off" autofocus>
-            <p class="composition-container">
-                <span id="composition-field">In a word, begin...</span>
-                <span class="cursor">|</span>
-            </p>
-        </section>
-
-        <section class="suggestions">
-            <div class="suggestion-field"></div>
-            <div class="suggestion-field"></div>
-            <div class="suggestion-field"></div>
-        </section>
-
-        <section class="buttons">
-            <button id="restart-btn" class="button restart disabled" title="start fresh">
-                <span class="sr-only">start fresh</span>
-            </button>
-            <button id="back-btn" class="button back disabled" title="delete previous word">
-                <span class="sr-only">delete previous word</span>
-            </button>
-            <button id="save-btn" class="button save disabled" title="save to museum">
-                <span class="sr-only">save to museum</span>
-            </button>
-            <div id="share-btns" class="sharing">
-                <button id="share-btn" class="button share disabled" title="share to social media">
-                    <span class="sr-only">share to social media</span>
-                </button>
-                <button id="share-fb-btn" class="button social-btn share-fb" title="share to facebook">
-                    <span class="sr-only">share to facebook</span>
-                </button>
-                <button id="share-twitter-btn" class="button social-btn share-twitter" title="share to twitter">
-                    <span class="sr-only">share to twitter</span>
-                </button>
-            </div>
-        </section>
-    </article>
-    <!-- / COMPOSE PAGE -->
+	<header class="header">
+		<h1 class="header-text">Muse Machina<span class="cursor">|</span></h1>
+	</header>
+	<!-- / GLOBAL ELEMENTS -->
 
 
-    <!-- MUSEUM PAGE -->
-    <article class="page" id="museum-page" aria-labelledby="museum-link">
-        <section id="museum-entries" class="musem-entries"></section>
-    </article>
-    <!-- / MUSEUM PAGE -->
+	<!-- COMPOSE PAGE -->
+	<article class="page active-page" id="compose-page" aria-labelledby="compose-link">
+		<section class="composition">
+			<input id="initial-input" autocomplete="off" autofocus>
+			<p class="composition-container">
+				<span id="composition-field">In a word, begin...</span>
+				<span class="cursor">|</span>
+			</p>
+		</section>
+
+		<section class="suggestions">
+			<div class="suggestion-field"></div>
+			<div class="suggestion-field"></div>
+			<div class="suggestion-field"></div>
+		</section>
+
+		<section class="buttons">
+			<button id="restart-btn" class="button restart disabled" title="start fresh">
+				<span class="sr-only">start fresh</span>
+			</button>
+			<button id="back-btn" class="button back disabled" title="delete previous word">
+				<span class="sr-only">delete previous word</span>
+			</button>
+			<button id="save-btn" class="button save disabled" title="save to museum">
+				<span class="sr-only">save to museum</span>
+			</button>
+			<div id="share-btns" class="sharing">
+				<button id="share-btn" class="button share disabled" title="share to social media">
+					<span class="sr-only">share to social media</span>
+				</button>
+				<button id="share-fb-btn" class="button social-btn share-fb" title="share to facebook">
+					<span class="sr-only">share to facebook</span>
+				</button>
+				<button id="share-twitter-btn" class="button social-btn share-twitter" title="share to twitter">
+					<span class="sr-only">share to twitter</span>
+				</button>
+			</div>
+		</section>
+	</article>
+	<!-- / COMPOSE PAGE -->
 
 
-    <!-- ABOUT PAGE -->
-    <article class="page" id="about-page" aria-labelledby="about-link">
-        <section class="about">
-            <p>
-                <span class="bold">Muse Machina is a poetic predictive text generator.</span>
-                Its word bank is fed exclusively by the springs of literary works. To compose, enter an initial word and press start. Using the back button will refresh the previous word's suggestions.
-            </p>
-            
-            <p>
-                <span class="bold">Composing with Muse Machina works best as a collaborative process.</span>
-                The Muse knows nothing of meaning, and little of syntax; it merely offers suggestions, possible directions in which to move. The composer's agency &#8212; in selecting or rejecting words, in wandering down paths then doubling back again when they prove unfruitful or uninteresting &#8212; is a creative act. These are the choices that create meaning and avoid mundanity. The magic of the Muse is simply to take the writer in unexpected directions.
-            </p>
-
-            <p>Created as a passion project by Anna Rasshivkina.</p>
-
-            <p class="postscript">
-                <span class="bold">P.S. Muse Machina is always looking for new texts!</span>
-                What works best are pieces of writing composed of beautiful sentences, comprising unique word pairs. The corpus currently includes works by Annie Dillard, Italo Calvino, Pablo Neruda, Mary Oliver, Ilya Kaminsky, and Leonard Cohen, among others. If you have a suggestion, please <a id="email-suggestions" href="mailto:annarasshivkina@gmail.com?subject=Muse+Machina+Suggestion" target="_blank">email me</a>.
-            </p>
-        </section>
-    </article>
-    <!-- / ABOUT PAGE -->
+	<!-- MUSEUM PAGE -->
+	<article class="page" id="museum-page" aria-labelledby="museum-link">
+		<section id="museum-entries" class="musem-entries"></section>
+	</article>
+	<!-- / MUSEUM PAGE -->
 
 
-    <!-- SAVE POEM DIALOGUE -->
-    <div class="save-poem-overlay"></div>
-    <article class="save-poem-dialogue">
-        <p class="dialogue-text">What's your pen name?</p>
-        <input id="penname" class="dialogue-input">
-        <button id="db-save-btn" class="db-save-btn">Save</button>
-    </article>
-    <!-- / SAVE POEM DIALOGUE -->
+	<!-- ABOUT PAGE -->
+	<article class="page" id="about-page" aria-labelledby="about-link">
+		<section class="about">
+			<p>
+				<span class="bold">Muse Machina is a poetic predictive text generator.</span>
+				Its word bank is fed exclusively by the springs of literary works. To compose, enter an initial word and press
+				start. Using the back button will refresh the previous word's suggestions.
+			</p>
+
+			<p>
+				<span class="bold">Composing with Muse Machina works best as a collaborative process.</span>
+				The Muse knows nothing of meaning, and little of syntax; it merely offers suggestions, possible directions in
+				which to move. The composer's agency &#8212; in selecting or rejecting words, in wandering down paths then
+				doubling back again when they prove unfruitful or uninteresting &#8212; is a creative act. These are the choices
+				that create meaning and avoid mundanity. The magic of the Muse is simply to take the writer in unexpected
+				directions.
+			</p>
+
+			<p>Created as a passion project by Anna Rasshivkina.</p>
+
+			<p class="postscript">
+				<span class="bold">P.S. Muse Machina is always looking for new texts!</span>
+				What works best are pieces of writing composed of beautiful sentences, comprising unique word pairs. The corpus
+				currently includes works by Annie Dillard, Italo Calvino, Pablo Neruda, Mary Oliver, Ilya Kaminsky, and Leonard
+				Cohen, among others. If you have a suggestion, please <a id="email-suggestions"
+					href="mailto:annarasshivkina@gmail.com?subject=Muse+Machina+Suggestion" target="_blank">email me</a>.
+			</p>
+		</section>
+	</article>
+	<!-- / ABOUT PAGE -->
 
 
-    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-database.js"></script>
-    <script>
-    var config = {
-        apiKey: "AIzaSyDiDgx_g01uVSVA2oNiVnZ21H7szNNt_i8",
-        authDomain: "muse-machina.firebaseapp.com",
-        databaseURL: "https://muse-machina.firebaseio.com",
-        projectId: "muse-machina",
-        storageBucket: "muse-machina.appspot.com",
-        messagingSenderId: "738706313143"
-    };
-    firebase.initializeApp(config);
-    </script>
-    <script src="public/data/dictionary.jsonp"></script>
-    <script src="public/scripts/script.js"></script>
+	<!-- SAVE POEM DIALOGUE -->
+	<div class="save-poem-overlay"></div>
+	<article class="save-poem-dialogue">
+		<p class="dialogue-text">What's your pen name?</p>
+		<input id="penname" class="dialogue-input">
+		<button id="db-save-btn" class="db-save-btn">Save</button>
+	</article>
+	<!-- / SAVE POEM DIALOGUE -->
+
+
+	<script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-database.js"></script>
+	<script>
+		var config = {
+			apiKey: "AIzaSyDiDgx_g01uVSVA2oNiVnZ21H7szNNt_i8",
+			authDomain: "muse-machina.firebaseapp.com",
+			databaseURL: "https://muse-machina.firebaseio.com",
+			projectId: "muse-machina",
+			storageBucket: "muse-machina.appspot.com",
+			messagingSenderId: "738706313143"
+		};
+		firebase.initializeApp(config);
+	</script>
+	<script src="public/data/dictionary.jsonp"></script>
+	<script src="public/scripts/script.js"></script>
 </body>
+
 </html>
