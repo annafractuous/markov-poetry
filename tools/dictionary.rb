@@ -26,6 +26,7 @@ class Dictionary
 
     def read_files
         @corpora.map! do |corpus|
+						# binding.pry
             File.open(corpus) { |f| f.read }
         end
     end
@@ -90,8 +91,7 @@ end
 
 ######
 # To Run in Terminal:
-#   ruby dictionary.rb
-#
+#   ruby tools/dictionary.rb
 ######
 
 Dictionary.new([
