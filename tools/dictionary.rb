@@ -99,5 +99,6 @@ Dictionary.new([
     'annie_dillard-pilgrim_at_tinker_creek.txt',
     'annie_dillard-solar_eclipse.txt',
     'italo_calvino-distance_of_the_moon.txt',
+    'mesha_maren-sugar_run.txt',
     'poems.txt'
 ])
