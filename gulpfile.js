@@ -1,7 +1,8 @@
 /**
  * NOTES
  * - If getting an error like: "Warning: Accessing non-existent property 'cat' of module exports inside circular dependency ... "
- * 		=> make sure all references to shelljs specify version ^0.8.4 and run `npm i shelljs`
+ *    => run `node --trace-warnings $(which gulp)` for a stack trace
+ * 		=> make sure all references to shelljs specify version ^0.8.4 and run `npm i shelljs@0.8.4 --save-dev`
  */
 
 const gulp     = require('gulp'),
