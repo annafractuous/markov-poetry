@@ -19,6 +19,7 @@
     "url": "https://github.com/annafractuous/markov-poetry/issues"
   },
   "homepage": "https://github.com/annafractuous/markov-poetry#readme",
+  "browserslist": "last 3 versions or > 1%",
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
@@ -28,7 +29,7 @@
     "event-stream": "^4.0.1",
     "glob": "^10.0.0",
     "gulp": "^5.0.0",
-    "gulp-autoprefixer": "^9.0.0",
+    "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.2.0",
     "gulp-cli": "^3.0.0",

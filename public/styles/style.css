@@ -40,9 +40,11 @@ body {
 }
 .page.active-page.slide-out {
   left: 100vw;
+  -webkit-transition: left ease 300ms;
   transition: left ease 300ms;
 }
 .page.slide-in {
+  -webkit-transition: left ease 300ms;
   transition: left ease 300ms;
 }
 @media (min-width: 768px) {
@@ -66,6 +68,8 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
@@ -125,14 +129,19 @@ body {
 }
 
 .suggestions {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   max-width: 750px;
   margin: 0 auto;
 }
 
 .suggestion-field {
-  flex-basis: 33.33%;
+  -ms-flex-preferred-size: 33.33%;
+      flex-basis: 33.33%;
   max-width: 250px;
   padding: 0 10px;
   text-align: center;
@@ -162,8 +171,12 @@ body {
 }
 
 .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   margin-top: 40px;
 }
 
@@ -227,6 +240,7 @@ body {
   z-index: 1;
   opacity: 0;
   pointer-events: none;
+  -webkit-transition: left 200ms ease-in, opacity 0s ease 200ms;
   transition: left 200ms ease-in, opacity 0s ease 200ms;
 }
 @media (min-width: 550px) {
@@ -238,6 +252,7 @@ body {
 .sharing.expanded .social-btn {
   opacity: 1;
   pointer-events: all;
+  -webkit-transition: left 200ms ease-in;
   transition: left 200ms ease-in;
 }
 .sharing.expanded .social-btn.share-fb {
@@ -330,6 +345,7 @@ body {
 .dialogue-open .save-poem-dialogue,
 .dialogue-open .save-poem-overlay {
   pointer-events: all;
+  -webkit-transition: opacity 300ms ease-in;
   transition: opacity 300ms ease-in;
 }
 
@@ -347,9 +363,16 @@ body {
 }
 
 .save-poem-dialogue {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
   position: relative;
   width: 80vw;
   height: 50vw;

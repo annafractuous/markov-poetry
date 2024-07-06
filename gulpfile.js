@@ -12,7 +12,7 @@ const gulp     = require('gulp'),
 	uglify       = require('gulp-uglify'),                 // minify scripts
 	stylelint    = require('gulp-stylelint'),              // lint SCSS
 	scss         = require('gulp-sass')(require('sass')),  // compile SCSS files to CSS
-	// autoprefixer = require('gulp-autoprefixer'),           // auto-prefix CSS
+	autoprefixer = require('gulp-autoprefixer'),           // auto-prefix CSS
 	cleanCSS     = require('gulp-clean-css'),              // minify styles
 	rename       = require('gulp-rename');                 // rename files when saving to build
 
@@ -38,7 +38,7 @@ const styles = () => {
 		.pipe(scss())
 		.on('error', streamError)
 		.pipe(stylelint({ reporters: [{formatter: 'string', console: true }] }))
-		// .pipe(autoprefixer())
+		.pipe(autoprefixer())
 		.pipe(rename({ basename: 'style' }))
 		.pipe(gulp.dest('public'))
 		.pipe(cleanCSS())
