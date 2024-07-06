@@ -1,72 +1,79 @@
-// Gulp – compile & minify files, run server, watch for changes
-var gulp         = require('gulp'),
-    browserify   = require('browserify'),             // bundle packages for client-side use
-    source       = require('vinyl-source-stream'),    // convert to vinyl-backed stream
-    buffer       = require('vinyl-buffer'),           // convert back to buffered for plugins that don't allow streaming
-    babel        = require('gulp-babel'),             // transpile scripts to ES6
-    uglify       = require('gulp-uglify'),            // minify scripts
-    scss         = require('gulp-scss'),              // compile SCSS files to CSS
-    autoprefixer = require('gulp-autoprefixer'),      // auto-prefix CSS
-    cleanCSS     = require('gulp-clean-css'),         // minify styles
-    rename       = require('gulp-rename'),            // rename files when saving to build
-    pump         = require('pump');                   // error handling
-    webserver    = require('gulp-webserver');
+/**
+ * NOTES
+ * - If getting an error like: "Warning: Accessing non-existent property 'cat' of module exports inside circular dependency ... "
+ * 		=> make sure all references to shelljs specify version ^0.8.4 and run `npm i shelljs`
+ */
+
+const gulp     = require('gulp'),
+	browserify   = require('browserify'),                  // bundle packages for client-side use
+	stream       = require('vinyl-source-stream'),         // convert to vinyl-backed stream
+	buffer       = require('vinyl-buffer'),                // convert to buffered vinyl file object
+	babel        = require('gulp-babel'),                  // transpile scripts to ES6
+	uglify       = require('gulp-uglify'),                 // minify scripts
+	stylelint    = require('gulp-stylelint'),              // lint SCSS
+	scss         = require('gulp-sass')(require('sass')),  // compile SCSS files to CSS
+	// autoprefixer = require('gulp-autoprefixer'),           // auto-prefix CSS
+	cleanCSS     = require('gulp-clean-css'),              // minify styles
+	rename       = require('gulp-rename');                 // rename files when saving to build
 
 
 /*
-  Compile Styles
+	Error-Handling
 */
-gulp.task('styles',function(cb) {
-    pump([
-        gulp.src('styles/app.scss'),
-        scss(),
-        autoprefixer(),
-        gulp.dest('public/styles'),
-        cleanCSS(),
-        rename({ suffix: '.min' }),
-        gulp.dest('public/styles')
-    ],
-    cb);
-});
+function streamError(error) {
+	console.log(error.toString())
+	this.emit('end')
+}
+
+function failOnError(error) {
+	console.log(error.toString())
+	process.exit(1)
+}
 
 /*
-  Concatenate JS
+	Styles
 */
-gulp.task('scripts', function(cb) {
-    var browserifySrc = browserify({
-        entries: 'scripts/app.js',
-        debug: true
-    }).bundle()
-    pump([
-        browserifySrc,
-        source('script.js'),
-        gulp.dest('public/scripts'),
-        buffer(),
-        babel({ presets: ['env'] }),
-        uglify(),
-        rename({ suffix: '.min' }),
-        gulp.dest('public/scripts')
-    ],
-    cb);
-});
+const styles = () => {
+	return gulp.src(['styles/app.scss'], {base: './'})
+		.pipe(scss())
+		.on('error', streamError)
+		.pipe(stylelint({ reporters: [{formatter: 'string', console: true }] }))
+		// .pipe(autoprefixer())
+		.pipe(rename({ basename: 'style' }))
+		.pipe(gulp.dest('public'))
+		.pipe(cleanCSS())
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(gulp.dest('public'))
+}
 
 /*
-  Watch for Changes
+	Scripts
 */
-gulp.task('watch', function() {
-    gulp.watch('scripts/*.js', ['scripts']);
-    gulp.watch('styles/**/*.scss', ['styles']);
-});
+const scripts = () => {
+	return browserify({ entries: ['scripts/app.js'] })
+		.transform('eslintify')
+		.transform('babelify')
+		.bundle()
+		.on('error', streamError)
+		.pipe(stream('scripts/app.js'))
+		.pipe(rename({ basename: 'script' }))
+		.pipe(gulp.dest('public'))
+		// .pipe(buffer())
+		// .pipe(babel({ presets: ['env'] }))
+		// .pipe(uglify())
+		// .pipe(rename({ suffix: '.min' }))
+		// .pipe(gulp.dest('public'))
+}
 
 /*
-  Webserver
+	Watch for Changes
 */
-gulp.task('webserver', function() {
-    gulp.src('.')
-        .pipe(webserver({
-            livereload: true,
-            directoryListing: true
-        }));
-});
+const watch = () => {
+	gulp.watch(['scripts/app.js'], scripts)
+	gulp.watch(['styles/app.scss'], styles)
+}
 
-gulp.task('default', ['styles', 'scripts', 'watch', 'webserver']);
+/***************************** Exported Tasks *****************************/
+exports.default = gulp.series(gulp.parallel(styles, scripts), watch);
+exports.build = gulp.series(gulp.parallel(styles, scripts));
+/**************************************************************************/
