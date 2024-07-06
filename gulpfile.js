@@ -58,11 +58,11 @@ const scripts = () => {
 		.pipe(stream('scripts/app.js'))
 		.pipe(rename({ basename: 'script' }))
 		.pipe(gulp.dest('public'))
-		// .pipe(buffer())
-		// .pipe(babel({ presets: ['env'] }))
-		// .pipe(uglify())
-		// .pipe(rename({ suffix: '.min' }))
-		// .pipe(gulp.dest('public'))
+		.pipe(buffer())
+		.pipe(babel())
+		.pipe(uglify())
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(gulp.dest('public'))
 }
 
 /*
